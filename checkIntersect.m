@@ -140,7 +140,6 @@ for ii = 1:6
     ints(ii) = t;
     
 end
-ints
 
 %if theres no intersect, return 0
 if(norm(ints) == 0)

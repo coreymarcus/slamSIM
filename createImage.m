@@ -17,6 +17,29 @@ width = sz(1);
 height = sz(2);
 I = ones(height, width, 3);
 
+% cycle throught all the points
+parfor ii = 1:width
+    for jj = 1:height
+        
+        %get pixel vector and then rotate it into the inertial frame
+        v = squeeze(V(jj,ii,:));
+        v = quatrotate(quatconj(q'),v')';
+        
+        % check intersect
+        inter = checkIntersect(C, P, v);
+        
+        if(inter == 0) %we hit nothing
+            continue;
+        elseif(inter == 7) %we hit an edge
+            I(jj,ii,:) = [0 0 0];
+            continue;
+        end
+        
+        %else we hit an edge and need to get that edges color
+        I(jj,ii,:) = C.faces{inter}.color;
+        
+    end
+end
 
 
 
