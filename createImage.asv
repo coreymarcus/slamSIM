@@ -1,0 +1,11 @@
+function [outputArg1,outputArg2] = createImage(inputArg1,inputArg2)
+%creates an RGB image of a cube with a white background given cube
+%parameters, camera position and orientation, and camera calibration matrix
+% Inputs
+% C = cube structure
+% P = [3x1] camera position in inertial frame
+% R = [3x1] rotation from 
+outputArg1 = inputArg1;
+outputArg2 = inputArg2;
+end
+

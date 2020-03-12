@@ -1,0 +1,19 @@
+%This script tests all my functions and sub functions
+
+clear
+close all
+clc
+
+
+%% Create Cube
+P = [1; 1; 1];
+s = 0.5;
+sw = 0.05;
+fc = rand(6,3);
+ec = [1 1 1];
+C = createCube(P, s, sw, fc, ec);
+
+%plot all the verticies to see if they're right
+for ii = 1:6
+    
+end
