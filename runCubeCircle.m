@@ -59,6 +59,6 @@ for ii = 1:N
     img = createImage(C, x(:,ii), q', V, sz);
     imshow(img)
     
-    imwrite(img,strcat('images/cubeCircling',num2str(ii),'.jpg'))
+    imwrite(img,strcat('images/cubeCircling',num2str(ii,'%03i'),'.jpg'))
 
 end
