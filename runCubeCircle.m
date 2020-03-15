@@ -8,7 +8,9 @@ clc
 R = 5; %radius
 N = 120; %number of images
 inc = 1; %inclination (not a real orbital inclination)
-theta = linspace(0,2*pi,N);
+Revs = 0.25; %number of revolutions around the cube
+
+theta = linspace(0,2*pi*Revs,N);
 x = zeros(3,N);
 for ii = 1:N
     x(1,ii) = R*cos(theta(ii));
