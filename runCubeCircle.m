@@ -6,9 +6,9 @@ clc
 
 %circle parameters
 R = 5; %radius
-N = 120; %number of images
+N = 1500; %number of images
 inc = 1; %inclination (not a real orbital inclination)
-Revs = 0.25; %number of revolutions around the cube
+Revs = 2; %number of revolutions around the cube
 
 theta = linspace(0,2*pi*Revs,N);
 x = zeros(3,N);
@@ -52,6 +52,7 @@ V = createPixelVectors(K,width,height);
 %center
 v = [0; 0; 1];
 figure
+tic
 for ii = 1:N
    
     %create the quaternion for this location
@@ -61,6 +62,10 @@ for ii = 1:N
     img = createImage(C, x(:,ii), q', V, sz);
     imshow(img)
     
-    imwrite(img,strcat('images/cubeCircling',num2str(ii,'%03i'),'.jpg'))
+    imwrite(img,strcat('images/cubeCircling',num2str(ii,'%04i'),'.jpg'))
+    
+    disp('Percent Complete:')
+    disp(ii/N*100)
 
 end
+toc
