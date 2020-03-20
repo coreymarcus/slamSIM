@@ -6,7 +6,7 @@ clc
 
 %circle parameters
 R = 5; %radius
-N = 1500; %number of images
+N = 1000; %number of images
 inc = 1; %inclination (not a real orbital inclination)
 Revs = 2; %number of revolutions around the cube
 
@@ -15,14 +15,15 @@ x = zeros(3,N);
 for ii = 1:N
     x(1,ii) = R*cos(theta(ii));
     x(2,ii) = R*sin(theta(ii));
-    x(3,ii) = inc*sin(4*theta(ii));
+    % x(3,ii) = inc*sin(4*theta(ii));
+    x(3,ii) = inc;
 end
 
 figure
 scatter3(x(1,:),x(2,:),x(3,:))
 
 % Create the cube
-P = [0; 0; 0];
+P = [1; 0; 0];
 s = 0.5;
 sw = 0.05;
 fc = [1 0 0;
@@ -56,11 +57,12 @@ tic
 for ii = 1:N
    
     %create the quaternion for this location
-    r = vrrotvec(v, P - x(:,ii));
+    imFoc = [0 0 0]'; %point the image is centered on
+    r = vrrotvec(v, imFoc - x(:,ii));
     q = axang2quat(r);
     
-    img = createImage(C, x(:,ii), q', V, sz);
-    imshow(img)
+    img = createImage(C, x(:,ii), q', V, sz, K);
+    imshow(img);
     
     imwrite(img,strcat('images/cubeCircling',num2str(ii,'%04i'),'.jpg'))
     

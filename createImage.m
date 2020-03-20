@@ -1,4 +1,4 @@
-function I = createImage(C, P, q, V, sz)
+function I = createImage(C, P, q, V, sz, K)
 %creates an RGB image of a cube with a white background given cube
 %parameters, camera position and orientation, and camera calibration matrix
 % Inputs
@@ -17,9 +17,17 @@ width = sz(1);
 height = sz(2);
 I = ones(height, width, 3);
 
+%locate the verticies of the cube in pixel form
+Verts = locateVerticies(C, P, q, K);
+
+xMin = max([Verts(1) 1]);
+xMax = min([Verts(2) width]);
+yMin = max([Verts(3) 1]);
+yMax = min([Verts(4) height]);
+
 % cycle throught all the points
-parfor ii = 1:width
-    for jj = 1:height
+parfor ii = xMin:xMax
+    for jj = yMin:yMax
         
         %get pixel vector and then rotate it into the inertial frame
         v = squeeze(V(jj,ii,:));
