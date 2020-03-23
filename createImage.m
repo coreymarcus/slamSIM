@@ -25,6 +25,11 @@ xMax = min([Verts(2) width]);
 yMin = max([Verts(3) 1]);
 yMax = min([Verts(4) height]);
 
+%return if the box is out of the frame
+if(yMax < 1 || xMax < 1 || xMin >= width || yMin >= height)
+    return;
+end
+
 % cycle throught all the points
 parfor ii = xMin:xMax
     for jj = yMin:yMax

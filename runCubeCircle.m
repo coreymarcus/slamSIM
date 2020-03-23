@@ -1,13 +1,13 @@
-% Runs a circle around a cube at the origin
+% Runs a circle around a cube
 
 clear
 close all
 clc
 
 %circle parameters
-R = 5; %radius
+R = 3; %radius
 N = 1000; %number of images
-inc = 1; %inclination (not a real orbital inclination)
+inc = 0; %inclination (not a real orbital inclination)
 Revs = 2; %number of revolutions around the cube
 
 theta = linspace(0,2*pi*Revs,N);
@@ -58,8 +58,12 @@ for ii = 1:N
    
     %create the quaternion for this location
     imFoc = [0 0 0]'; %point the image is centered on
+    vec2cent = imFoc - x(:,ii);
     r = vrrotvec(v, imFoc - x(:,ii));
-    q = axang2quat(r);
+    theta = atan2(vec2cent(2),vec2cent(1));
+    q = angle2quat(theta,-pi/2,0,'ZXY');
+    q = quatconj(q);
+%     q = axang2quat(r);
     
     img = createImage(C, x(:,ii), q', V, sz, K);
     imshow(img);
