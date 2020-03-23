@@ -4,6 +4,10 @@ clear
 close all
 clc
 
+%image write path
+% impath = 'images/cubeStrafe';
+impath = '~/Documents/slamSIM/images/cubeStrafe';
+
 % Create the cube
 P = [0; 0; 0];
 s = 0.5;
@@ -32,14 +36,33 @@ K = [f, 0, px;
 V = createPixelVectors(K,width,height);
 
 % Create strafeing path
-IC = [-4, -4, -10]'; %starting point
-FC = [2, 2, -2]'; %final point
-d = 10; %distance from cube
-N = 10; %number of images
-x = zeros(3,N);
-x(1,:) = linspace(IC(1),FC(1),N);
-x(2,:) = linspace(IC(2),FC(2),N);
-x(3,:) = linspace(IC(3),FC(3),N);
+% IC = [1, 1, -2]'; %starting point
+% FC = [-1, -1, -2.5]'; %final point
+% d = 10; %distance from cube
+% N = 500; %number of images
+% x = zeros(3,N);
+% x(1,:) = linspace(IC(1),FC(1),N);
+% x(2,:) = linspace(IC(2),FC(2),N);
+% x(3,:) = linspace(IC(3),FC(3),N);
+
+% Create a multileg strafing path
+Nleg = 150; %number of images on each leg
+P1 = [.75, .5, -2]';
+P2 = [-.7, .45, -2]';
+P3 = [-.65, -.4, -2]';
+P4 = [1, -.45, -2]';
+P = [P1 P2 P3 P4 P1];
+Np = size(P,2);
+x1 = [];
+x2 = [];
+x3 = [];
+for ii = 1:Np-1
+    x1 = [x1 linspace(P(1,ii),P(1,ii+1),Nleg)];
+    x2 = [x2 linspace(P(2,ii),P(2,ii+1),Nleg)];
+    x3 = [x3 linspace(P(3,ii),P(3,ii+1),Nleg)];
+end
+x = [x1; x2; x3];
+N = (Np-1)*Nleg;
 
 %quaternion
 q = [1 0 0 0]';
@@ -48,9 +71,10 @@ q = [1 0 0 0]';
 for ii = 1:N
    
     img = createImage(C, x(:,ii), q, V, sz, K);
-    imshow(imgaussfilt(img,.75));
+    imgFilt = imgaussfilt(img,1.2);
+    imshow(imgFilt);
     
-    imwrite(img,strcat('images/cubeStrafe',num2str(ii,'%04i'),'.jpg'))
+    imwrite(imgFilt,strcat(impath,num2str(ii,'%04i'),'.jpg'))
     
     disp('Percent Complete:')
     disp(ii/N*100)
