@@ -1,4 +1,4 @@
-function I = checkIntersect(C, P, v)
+function [I, D] = checkIntersect(C, P, v)
 %checkIntersect detirmines if a vector will intersect the cube
 % Inputs
 % C - cube structure
@@ -8,7 +8,13 @@ function I = checkIntersect(C, P, v)
 % Outputs
 % I = 0 if no intersect, i if hitting the ith face (1:6), 7 if hitting an
 %   edge
+% D = distance to cube, 0 if no intersect
 
+
+%initialize distance
+D = 0;
+
+%initialize detection logic
 ints = zeros(6,1);
 edgeHit = zeros(6,1);
 for ii = 1:6
@@ -159,6 +165,9 @@ end
 if(edgeHit(I) == 1)
     I = 7;
 end
+
+%assign distance
+D = Y;
 
 end
 

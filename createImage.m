@@ -2,59 +2,128 @@ function I = createImage(C, P, q, V, sz, K)
 %creates an RGB image of a cube with a white background given cube
 %parameters, camera position and orientation, and camera calibration matrix
 % Inputs
-% C = cube structure
+% C = [Nx1] cell array of cube structures
 % P = [3x1] camera position in inertial frame
 % q = [4x1] quaternion rotating from inertial to camera frame, scalar firsts
 % V = [height x width x 3] matrix of vectors corresponding to each pixels
 % sz = [2x1] = [width, height] image size in pixels
 % 
 % Outputs
-% I = [height x width x 3] RGB triplet information
+% I = [height x width x 4] RGB+D triplet information
 
+%get number of cubes
+Ncubes = length(C);
 
 %initialize image
 width = sz(1);
 height = sz(2);
-I = ones(height, width, 3);
+Icell = cell(Ncubes,1);
 
-%locate the verticies of the cube in pixel form
-Verts = locateVerticies(C, P, q, K);
-
-xMin = max([Verts(1) 1]);
-xMax = min([Verts(2) width]);
-yMin = max([Verts(3) 1]);
-yMax = min([Verts(4) height]);
-
-%return if the box is out of the frame
-if(yMax < 1 || xMax < 1 || xMin >= width || yMin >= height)
-    return;
+%find the verticies of all the cubes
+bounds = ones(Ncubes,4);
+for ii = 1:Ncubes
+    
+    %locate the verticies of the cube in pixel form
+    Verts = locateVerticies(C{ii}, P, q, K);
+    
+    xMin = max([Verts(1) 1]);
+    xMax = min([Verts(2) width]);
+    yMin = max([Verts(3) 1]);
+    yMax = min([Verts(4) height]);
+    
+    %continue if the box is out of the frame
+    if(yMax < 1 || xMax < 1 || xMin >= width || yMin >= height)
+        continue;
+    else
+        bounds(ii,:) = [xMin, xMax, yMin, yMax];
+    end
+    
 end
 
-% cycle throught all the points
-parfor ii = xMin:xMax
-    for jj = yMin:yMax
-        
-        %get pixel vector and then rotate it into the inertial frame
-        v = squeeze(V(jj,ii,:));
-        v = quatrotate(quatconj(q'),v')';
-        
-        % check intersect
-        inter = checkIntersect(C, P, v);
-        
-        if(inter == 0) %we hit nothing
-            continue;
-        elseif(inter == 7) %we hit an edge
-            I(jj,ii,:) = [0 0 0];
-            continue;
+
+% cycle throught all the cubes and all the points
+for kk = 1:Ncubes
+    
+    %initialize this cube's image (RGB+D)
+    Iloop = ones(height, width, 3);
+    Iloop(:,:,4) = zeros(height, width);
+    
+    xIdxs = bounds(kk,1):bounds(kk,2);
+    yIdxs = bounds(kk,3):bounds(kk,4);
+    parfor ii = xIdxs
+        for jj = yIdxs
+            
+            %get pixel vector and then rotate it into the inertial frame
+            v = squeeze(V(jj,ii,:));
+            v = quatrotate(quatconj(q'),v')';
+            
+            % check intersect
+            [inter, D] = checkIntersect(C{kk}, P, v);
+            
+            %intitialize pixel
+            Pix = zeros(4,1);
+            
+            %assign distance
+            Pix(4) = D;
+            
+            if(inter == 0) 
+                %we hit nothing
+                continue;
+                
+            elseif(inter == 7) 
+                %we hit an edge
+                Pix(1:3) = C{kk}.ec;
+                
+            else
+                %else we hit an face and need to get that edges color
+                Pix(1:3) = C{kk}.faces{inter}.color;
+                
+            end
+            
+            Iloop(jj,ii,:) = Pix;
+            
         end
-        
-        %else we hit an edge and need to get that edges color
-        I(jj,ii,:) = C.faces{inter}.color;
-        
+    end
+    
+    %add this cube's image to the cell
+    Icell{kk} = Iloop;
+end
+
+%create final output
+I = ones(height, width, 3);
+I(:,:,4) = zeros(height, width);
+
+for ii = 1:Ncubes
+    
+    xIdxs = bounds(ii,1):bounds(ii,2);
+    yIdxs = bounds(ii,3):bounds(ii,4);
+    
+    for jj = yIdxs %note: a parfor loop is slower here
+        for kk = xIdxs
+            Targ = I(jj,kk,:);
+            Pix = squeeze(Icell{ii}(jj,kk,:));
+            
+            if(Pix(4) == 0)
+                %there is nothing here
+                continue;
+            end
+            
+            if(Targ(4) == 0)
+                %this is the first occupied pixel we've observed
+                I(jj,kk,:) = Pix;
+                continue;
+            end
+            
+            if(Targ(4) > Pix(4))
+                %this pixel is closer than the previously observed one
+                I(jj,kk,:) = Pix;
+            end
+            
+        end
     end
 end
 
-
-
 end
+
+
 

@@ -19,8 +19,33 @@ fc = [1 0 0;
     1 0 1;
     0 1 1];
 
-ec = [1 1 1];
+ec = [0, 0, 0];
 C = createCube(P, s, sw, fc, ec);
+
+%create more cubes
+P2 = [0; 0; 5];
+C2 = createCube(P2, s, sw, fc, ec);
+
+P3 = [1; -1; 4];
+C3 = createCube(P3, s, sw, fc, ec);
+
+P4 = [0; 2; 10];
+C4 = createCube(P4, s, sw, fc, ec);
+
+P5 = [0; -2; 7.5];
+C5 = createCube(P5, s, sw, fc, ec);
+
+P6 = [2; 0; 4];
+C6 = createCube(P6, s, sw, fc, ec);
+
+%cube cell array
+CArray = cell(2,1);
+CArray{1} = C;
+CArray{2} = C2;
+CArray{3} = C3;
+CArray{4} = C4;
+CArray{5} = C5;
+CArray{6} = C6;
 
 % createPixelVectors and camera information
 f = 500;
@@ -70,7 +95,13 @@ q = [1 0 0 0]';
 % run through and create an image at each point
 for ii = 1:N
    
-    img = createImage(C, x(:,ii), q, V, sz, K);
+    %get RGB+D info
+    imgRGBD = createImage(CArray, x(:,ii), q, V, sz, K);
+    
+    %extract RGB info
+    img = imgRGBD(:,:,1:3);
+    
+    %filter and display
     imgFilt = imgaussfilt(img,1.2);
     imshow(imgFilt);
     
