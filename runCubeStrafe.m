@@ -5,8 +5,9 @@ close all
 clc
 
 %image write path
-% impath = 'images/cubeStrafe';
-impath = '~/Documents/slamSIM/images/cubeStrafe';
+impath = 'images/cubeStrafe';
+% impath = '~/Documents/slamSIM/images/cubeStrafe';
+% impath = 'C:\Users\corey\Documents\GitHub\slamSIM\cubeStrafe';
 
 % Create the cube
 P = [0; 0; 0];
@@ -19,7 +20,7 @@ fc = [1 0 0;
     1 0 1;
     0 1 1];
 
-ec = [0, 0, 0];
+ec = [.1, .1, .1];
 C = createCube(P, s, sw, fc, ec);
 
 %create more cubes
@@ -38,6 +39,11 @@ C5 = createCube(P5, s, sw, fc, ec);
 P6 = [2; 0; 4];
 C6 = createCube(P6, s, sw, fc, ec);
 
+%create an all encompassing rectangular prism
+s = [5; 5; 25];
+sw = .1;
+C7 = createRectangularPrism(P, s, sw, fc, ec, true);
+
 %cube cell array
 CArray = cell(2,1);
 CArray{1} = C;
@@ -46,6 +52,7 @@ CArray{3} = C3;
 CArray{4} = C4;
 CArray{5} = C5;
 CArray{6} = C6;
+CArray{7} = C7;
 
 % createPixelVectors and camera information
 f = 500;
