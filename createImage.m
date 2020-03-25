@@ -59,9 +59,13 @@ for kk = 1:Ncubes
             yIdxs = 1:height;
     end
     
-    for ii = xIdxs
+    parfor ii = xIdxs
+        
+        %temporary row
+        tempCol = [ones(length(yIdxs),3) zeros(length(yIdxs),1)];
+        
         for jj = yIdxs
-            
+                         
             %get pixel vector and then rotate it into the inertial frame
             v = squeeze(V(jj,ii,:));
             v = quatrotate(quatconj(q'),v')';
@@ -89,9 +93,12 @@ for kk = 1:Ncubes
                 
             end
             
-            Iloop(jj,ii,:) = Pix;
+            %build temporary row
+            tempCol((yIdxs == jj),:) = Pix;
             
         end
+        
+        Iloop(yIdxs,ii,:) = tempCol;
     end
     
     %add this cube's image to the cell
