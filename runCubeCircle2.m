@@ -5,7 +5,7 @@ close all
 clc
 
 %circle parameters
-R = 3; %radius
+R = 6; %radius
 N = 1000; %number of images
 inc = 0; %inclination (not a real orbital inclination)
 Revs = 2; %number of revolutions around the cube
@@ -35,8 +35,37 @@ fc = [1 0 0;
 
 ec = [.1 .1 .1];
 C = createCube(P, s, sw, fc, ec);
-Ccell = cell(1);
-Ccell{1} = C;
+
+%create more cubes
+P2 = [0; 0; -3];
+C2 = createCube(P2, s, sw, fc, ec);
+
+P3 = [1; -1; 0];
+C3 = createCube(P3, s, sw, fc, ec);
+
+P4 = [0; 2; .5];
+C4 = createCube(P4, s, sw, fc, ec);
+
+P5 = [-1; 0; 0];
+C5 = createCube(P5, s, sw, fc, ec);
+
+P6 = [.4; -1; .4];
+C6 = createCube(P6, s, sw, fc, ec);
+
+%create an all encompassing rectangular prism
+s = [14; 14; 12];
+sw = .1;
+C7 = createRectangularPrism([0, 0, 0]', s, sw, fc, ec, true);
+
+%cube cell array
+CArray = cell(2,1);
+CArray{1} = C;
+CArray{2} = C2;
+CArray{3} = C3;
+CArray{4} = C4;
+CArray{5} = C5;
+CArray{6} = C6;
+CArray{7} = C7;
 
 % createPixelVectors and camera information
 f = 500;
@@ -62,16 +91,23 @@ for ii = 1:N
     imFoc = [0 0 0]'; %point the image is centered on
     vec2cent = imFoc - x(:,ii);
     r = vrrotvec(v, imFoc - x(:,ii));
-    theta = atan2(vec2cent(2),vec2cent(1));
-    q = angle2quat(theta,-pi/2,0,'ZXY');
-    q = quatconj(q);
+%     theta = atan2(vec2cent(2),vec2cent(1));
+%     q = angle2quat(theta,-pi/2,0,'ZXY');
+%     q = quatconj(q);
     q = axang2quat(r);
     
-    imgRGBD = createImage(Ccell, x(:,ii), q', V, sz, K);
-    img = imgRGBD(:,:,1:3);
-    imshow(img);
+    imgRGBD = createImage(CArray, x(:,ii), q', V, sz, K);
     
-    imwrite(img,strcat('images/cubeCircling',num2str(ii,'%04i'),'.jpg'))
+    %extract RGB info
+    img = imgRGBD(:,:,1:3);
+    
+    %filter and display
+    imgFilt = imgaussfilt(img,1.2);
+    imshow(imgFilt);
+    
+    imshow(imgFilt);
+    
+    imwrite(imgFilt,strcat('images/cubeCircling',num2str(ii,'%04i'),'.jpg'))
     
     disp('Percent Complete:')
     disp(ii/N*100)
