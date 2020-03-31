@@ -53,13 +53,18 @@ for kk = 1:Ncubes
     xIdxs = bounds(kk,1):bounds(kk,2);
     yIdxs = bounds(kk,3):bounds(kk,4);
     
+    %do a parfor or regular for loop
+%     numWorkers = 10;
+    
     %check to see if this is actually the all encompassing box
     if(isfield(C{kk},'isAllEncomp') && C{kk}.isAllEncomp)
             xIdxs = 1:width;
             yIdxs = 1:height;
+            %numWorkers = 10;
     end
     
-    parfor ii = xIdxs
+%     parfor (ii = xIdxs, numWorkers)
+    for ii = xIdxs
         
         %temporary row
         tempCol = [ones(length(yIdxs),3) zeros(length(yIdxs),1)];

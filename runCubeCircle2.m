@@ -9,7 +9,7 @@ addpath('../matlabScripts/')
 
 %circle parameters
 R = 6; %radius
-N = 1000; %number of images
+N = 10; %number of images
 inc = 1; %inclination (not a real orbital inclination)
 Revs = 1; %number of revolutions around the cube
 
@@ -108,13 +108,16 @@ for ii = 1:N
     RBI = wahbaSolver(aVec,vIMat,vBMat);
     q = dcm2quat(RBI);
     
+%     tic    
     imgRGBD = createImage(CArray, x(:,ii), q', V, sz, K);
+%     toc
     
     %extract RGB info
     img = imgRGBD(:,:,1:3);
     
     %filter and display
-    imgFilt = imgaussfilt(img,1.2);
+    % imgFilt = imgaussfilt(img,1.2);
+    imgFilt = img;
     imshow(imgFilt);
     
     imshow(imgFilt);
