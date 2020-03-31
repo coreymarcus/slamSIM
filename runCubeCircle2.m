@@ -4,6 +4,9 @@ clear
 close all
 clc
 
+%path for wahba solver
+addpath('../matlabScripts/')
+
 %circle parameters
 R = 6; %radius
 N = 1000; %number of images
@@ -82,19 +85,28 @@ V = createPixelVectors(K,width,height);
 
 %run through and create an image at each point, always pointing towards the
 %center
-v = [0; 0; 1];
+vz = [0; 0; 1];
+vx = [1; 0; 0];
+vBMat = [vx'; vz'];
+aVec = [1; 1];
+
 figure
 tic
 for ii = 1:N
    
     %create the quaternion for this location
     imFoc = [0 0 0]'; %point the image is centered on
-    vec2cent = imFoc - x(:,ii);
-    r = vrrotvec(v, imFoc - x(:,ii));
-%     theta = atan2(vec2cent(2),vec2cent(1));
-%     q = angle2quat(theta,-pi/2,0,'ZXY');
-%     q = quatconj(q);
-    q = axang2quat(r);
+    vz_I = imFoc - x(:,ii); %camera z-axis in the inertial frame
+    vx_I = [vz_I(2); -vz_I(1); 0]; %camera x-axis in the inertial frame    
+    
+    %normalize vectors
+    vx_I = vx_I/norm(vx_I);
+    vz_I = vz_I/norm(vz_I);
+    
+    %create matrix and solve wahbas problem
+    vIMat = [vx_I'; vz_I'];
+    RBI = wahbaSolver(aVec,vIMat,vBMat);
+    q = dcm2quat(RBI);
     
     imgRGBD = createImage(CArray, x(:,ii), q', V, sz, K);
     
