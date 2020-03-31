@@ -158,7 +158,7 @@ end
 I = find(ints == Y);
 if(length(I) > 1)
     I = I(1);
-    disp('Exact Edge Intersect');
+    % disp('Exact Edge Intersect');
 end
 
 %check for edge hit

@@ -7,7 +7,7 @@ function I = createImage(C, P, q, V, sz, K)
 % q = [4x1] quaternion rotating from inertial to camera frame, scalar firsts
 % V = [height x width x 3] matrix of vectors corresponding to each pixels
 % sz = [2x1] = [width, height] image size in pixels
-% 
+%
 % Outputs
 % I = [height x width x 4] RGB+D triplet information
 
@@ -49,23 +49,34 @@ for kk = 1:Ncubes
     
     %initialize this cube's image (RGB+D)
     Iloop = Itemplate;
-        
+    
     xIdxs = bounds(kk,1):bounds(kk,2);
     yIdxs = bounds(kk,3):bounds(kk,4);
     
     %check to see if this is actually the all encompassing box
     if(isfield(C{kk},'isAllEncomp') && C{kk}.isAllEncomp)
-            xIdxs = 1:width;
-            yIdxs = 1:height;
+        xIdxs = 1:width;
+        yIdxs = 1:height;
     end
     
-    parfor ii = xIdxs
+    for ii = xIdxs
         
         %temporary row
         tempCol = [ones(length(yIdxs),3) zeros(length(yIdxs),1)];
         
-        for jj = yIdxs
-                         
+        %to speed things up, we look at only a segment of yIdxs first, then
+        %we go back and fill in the details
+        yIdxsSparse = yIdxs(1):10:yIdxs(end);
+        
+        %make sure the last point is included
+        if(yIdxsSparse(end) ~= yIdxs(end))
+            yIdxsSparse(end+1) = yIdxs(end);
+        end
+        
+        deltaY = zeros(1,length(yIdxsSparse)-1);
+        idx = 1;
+        for jj = yIdxsSparse
+            
             %get pixel vector and then rotate it into the inertial frame
             v = squeeze(V(jj,ii,:));
             v = quatrotate(quatconj(q'),v')';
@@ -79,11 +90,11 @@ for kk = 1:Ncubes
             %assign distance
             Pix(4) = D;
             
-            if(inter == 0) 
+            if(inter == 0)
                 %we hit nothing
                 continue;
                 
-            elseif(inter == 7) 
+            elseif(inter == 7)
                 %we hit an edge
                 Pix(1:3) = C{kk}.ec;
                 
@@ -96,6 +107,80 @@ for kk = 1:Ncubes
             %build temporary row
             tempCol((yIdxs == jj),:) = Pix;
             
+            %look for changes in the color
+            if(idx ~= 1)
+                if(sum(tempCol(yIdxs == jj,1:3) == tempCol(yIdxs == yIdxsSparse(idx-1),1:3)) ~= 3)
+                    deltaY(idx-1) = 1;
+                end
+            end
+            
+            %increment other index
+            idx = idx+1;
+            
+        end
+        
+        %now we need to run through and fill in the gaps
+        idx = 2;
+        for jj = yIdxsSparse(2:end)
+            if(deltaY(idx - 1))
+                %we had a change in color, so do all the normal stuff
+                for qq = yIdxsSparse(idx-1)+1:yIdxsSparse(idx)-1
+                    %get pixel vector and then rotate it into the inertial frame
+                    v = squeeze(V(qq,ii,:));
+                    v = quatrotate(quatconj(q'),v')';
+                    
+                    % check intersect
+                    [inter, D] = checkIntersect(C{kk}, P, v);
+                    
+                    %intitialize pixel
+                    Pix = zeros(4,1);
+                    
+                    %assign distance
+                    Pix(4) = D;
+                    
+                    if(inter == 0)
+                        %we hit nothing
+                        continue;
+                        
+                    elseif(inter == 7)
+                        %we hit an edge
+                        Pix(1:3) = C{kk}.ec;
+                        
+                    else
+                        %else we hit an face and need to get that edges color
+                        Pix(1:3) = C{kk}.faces{inter}.color;
+                        
+                    end
+                    
+                    %build temporary row
+                    tempCol((yIdxs == qq),:) = Pix;
+                    
+                    %look for changes in the color
+                    if(idx ~= 1)
+                        if(sum(tempCol(idx,1:3) == tempCol(idx-1,1:3)) ~= 3)
+                            deltaY(idx-1) = 1;
+                        end
+                    end
+                    
+                end
+            else
+                %we did not have a change in color, just fill in the column
+                %blindly
+                for qq = yIdxsSparse(idx-1)+1:yIdxsSparse(idx)-1
+                    
+                    tempCol((yIdxs == qq),:) = tempCol(yIdxs == yIdxsSparse(idx-1),:);
+                    
+                end
+%                 tempCol(yIdxs == (yIdxsSparse(idx-1)+1):(yIdxsSparse(idx)-1),:) = ...
+%                     [tempCol(yIdxsSparse(idx-1),1)*ones(length((yIdxsSparse(idx-1)+1):(yIdxsSparse(idx)-1)),1), ...
+%                     tempCol(yIdxsSparse(idx-1),2)*ones(length((yIdxsSparse(idx-1)+1):(yIdxsSparse(idx)-1)),1), ...
+%                     tempCol(yIdxsSparse(idx-1),3)*ones(length((yIdxsSparse(idx-1)+1):(yIdxsSparse(idx)-1)),1), ...
+%                     tempCol(yIdxsSparse(idx-1),4)*ones(length((yIdxsSparse(idx-1)+1):(yIdxsSparse(idx)-1)),1)];
+%                 
+                
+            end            
+            %increment index
+            idx = idx+1;
         end
         
         Iloop(yIdxs,ii,:) = tempCol;
@@ -116,8 +201,8 @@ for ii = 1:Ncubes %it might speed things up to integrate this loop with the one 
     
     %check to see if this is actually the all encompassing box
     if(isfield(C{ii},'isAllEncomp') && C{ii}.isAllEncomp)
-            xIdxs = 1:width;
-            yIdxs = 1:height;
+        xIdxs = 1:width;
+        yIdxs = 1:height;
     end
     
     for jj = yIdxs %note: a parfor loop is slower here

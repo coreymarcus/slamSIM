@@ -68,7 +68,7 @@ CArray{3} = C3;
 CArray{4} = C4;
 CArray{5} = C5;
 CArray{6} = C6;
-CArray{7} = C7;
+% CArray{7} = C7;
 
 % createPixelVectors and camera information
 f = 500;
@@ -108,13 +108,16 @@ for ii = 1:N
     RBI = wahbaSolver(aVec,vIMat,vBMat);
     q = dcm2quat(RBI);
     
+    tic
     imgRGBD = createImage(CArray, x(:,ii), q', V, sz, K);
+    toc
     
     %extract RGB info
     img = imgRGBD(:,:,1:3);
     
     %filter and display
-    imgFilt = imgaussfilt(img,1.2);
+    %     imgFilt = imgaussfilt(img,1.2);
+    imgFilt = img;
     imshow(imgFilt);
     
     imshow(imgFilt);
