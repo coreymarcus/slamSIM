@@ -10,16 +10,16 @@ addpath('../matlabScripts/')
 %circle parameters
 R = 6; %radius
 N = 1000; %number of images
-inc = 0; %inclination (not a real orbital inclination)
-Revs = 2; %number of revolutions around the cube
+inc = 1; %inclination (not a real orbital inclination)
+Revs = 1; %number of revolutions around the cube
 
 theta = linspace(0,2*pi*Revs,N);
 x = zeros(3,N);
 for ii = 1:N
     x(1,ii) = R*cos(theta(ii));
     x(2,ii) = R*sin(theta(ii));
-    % x(3,ii) = inc*sin(4*theta(ii));
-    x(3,ii) = inc;
+    x(3,ii) = inc*sin(4*theta(ii));
+    %     x(3,ii) = inc;
 end
 
 figure
@@ -40,7 +40,7 @@ ec = [.1 .1 .1];
 C = createCube(P, s, sw, fc, ec);
 
 %create more cubes
-P2 = [0; 0; -3];
+P2 = [0; 0; -2];
 C2 = createCube(P2, s, sw, fc, ec);
 
 P3 = [1; -1; 0];
