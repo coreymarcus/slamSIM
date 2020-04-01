@@ -135,8 +135,8 @@ parfor ii = 1:N
     img = imgRGBD(:,:,1:3);
     
     %filter and display
-    imgFilt = imgaussfilt(img,1.2);
-%     imgFilt = img;
+%     imgFilt = imgaussfilt(img,1.2);
+    imgFilt = img;
     imshow(imgFilt);
     
     imshow(imgFilt);
