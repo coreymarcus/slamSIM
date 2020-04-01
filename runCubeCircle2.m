@@ -9,16 +9,18 @@ addpath('../matlabScripts/')
 
 %circle parameters
 R = 6; %radius
-N = 1000; %number of images
+Nrev = 2500; %number of images per revolution
 inc = 1; %inclination (not a real orbital inclination)
-Revs = 1; %number of revolutions around the cube
+Revs = 3; %number of revolutions around the cube
+Noscil = 40.3333; %number of oscillations per revolution
+N = round(Revs*Nrev);
 
 theta = linspace(0,2*pi*Revs,N);
 x = zeros(3,N);
 for ii = 1:N
     x(1,ii) = R*cos(theta(ii));
     x(2,ii) = R*sin(theta(ii));
-    x(3,ii) = inc*sin(4*theta(ii));
+    x(3,ii) = inc*sin(Noscil*theta(ii));
     %     x(3,ii) = inc;
 end
 
