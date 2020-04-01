@@ -38,6 +38,12 @@ C5 = createCube(P5, s, sw, fc, ec);
 P6 = [2; 0; 4];
 C6 = createCube(P6, s, sw, fc, ec);
 
+P7 = [2; 5; 20];
+C7 = createCube(P7, s, sw, fc, ec);
+
+P8 = [-2; -5; 30];
+C8 = createCube(P8, s, sw, fc, ec);
+
 %cube cell array
 CArray = cell(2,1);
 CArray{1} = C;
@@ -46,6 +52,8 @@ CArray{3} = C3;
 CArray{4} = C4;
 CArray{5} = C5;
 CArray{6} = C6;
+CArray{7} = C7;
+CArray{8} = C8;
 
 % createPixelVectors and camera information
 f = 500;
