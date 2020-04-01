@@ -33,8 +33,10 @@ fc = [1 0 0;
     1 0 1;
     0 1 1];
 
-ec = [1 1 1];
+ec = [.1 .1 .1];
 C = createCube(P, s, sw, fc, ec);
+Ccell = cell(1);
+Ccell{1} = C;
 
 % createPixelVectors and camera information
 f = 500;
@@ -63,9 +65,10 @@ for ii = 1:N
     theta = atan2(vec2cent(2),vec2cent(1));
     q = angle2quat(theta,-pi/2,0,'ZXY');
     q = quatconj(q);
-%     q = axang2quat(r);
+    q = axang2quat(r);
     
-    img = createImage(C, x(:,ii), q', V, sz, K);
+    imgRGBD = createImage(Ccell, x(:,ii), q', V, sz, K);
+    img = imgRGBD(:,:,1:3);
     imshow(img);
     
     imwrite(img,strcat('images/cubeCircling',num2str(ii,'%04i'),'.jpg'))

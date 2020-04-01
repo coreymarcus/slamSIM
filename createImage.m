@@ -42,17 +42,35 @@ end
 
 
 % cycle throught all the cubes and all the points
+Itemplate = ones(height, width, 4);
+Itemplate(:,:,4) = zeros(height, width);
+
 for kk = 1:Ncubes
     
     %initialize this cube's image (RGB+D)
-    Iloop = ones(height, width, 3);
-    Iloop(:,:,4) = zeros(height, width);
-    
+    Iloop = Itemplate;
+        
     xIdxs = bounds(kk,1):bounds(kk,2);
     yIdxs = bounds(kk,3):bounds(kk,4);
-    parfor ii = xIdxs
+    
+    %do a parfor or regular for loop
+%     numWorkers = 10;
+    
+    %check to see if this is actually the all encompassing box
+    if(isfield(C{kk},'isAllEncomp') && C{kk}.isAllEncomp)
+            xIdxs = 1:width;
+            yIdxs = 1:height;
+            %numWorkers = 10;
+    end
+    
+%     parfor (ii = xIdxs, numWorkers)
+    for ii = xIdxs
+        
+        %temporary row
+        tempCol = [ones(length(yIdxs),3) zeros(length(yIdxs),1)];
+        
         for jj = yIdxs
-            
+                         
             %get pixel vector and then rotate it into the inertial frame
             v = squeeze(V(jj,ii,:));
             v = quatrotate(quatconj(q'),v')';
@@ -80,9 +98,12 @@ for kk = 1:Ncubes
                 
             end
             
-            Iloop(jj,ii,:) = Pix;
+            %build temporary row
+            tempCol((yIdxs == jj),:) = Pix;
             
         end
+        
+        Iloop(yIdxs,ii,:) = tempCol;
     end
     
     %add this cube's image to the cell
@@ -93,10 +114,16 @@ end
 I = ones(height, width, 3);
 I(:,:,4) = zeros(height, width);
 
-for ii = 1:Ncubes
+for ii = 1:Ncubes %it might speed things up to integrate this loop with the one above
     
     xIdxs = bounds(ii,1):bounds(ii,2);
     yIdxs = bounds(ii,3):bounds(ii,4);
+    
+    %check to see if this is actually the all encompassing box
+    if(isfield(C{ii},'isAllEncomp') && C{ii}.isAllEncomp)
+            xIdxs = 1:width;
+            yIdxs = 1:height;
+    end
     
     for jj = yIdxs %note: a parfor loop is slower here
         for kk = xIdxs
