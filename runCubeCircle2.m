@@ -114,11 +114,11 @@ aVec = [1; 1];
 figure
 tic
 parfor ii = 1:N
-   
+    
     %create the quaternion for this location
     imFoc = [0 0 0]'; %point the image is centered on
     vz_I = imFoc - x(:,ii); %camera z-axis in the inertial frame
-    vx_I = [vz_I(2); -vz_I(1); 0]; %camera x-axis in the inertial frame    
+    vx_I = [vz_I(2); -vz_I(1); 0]; %camera x-axis in the inertial frame
     
     %normalize vectors
     vx_I = vx_I/norm(vx_I);
@@ -129,17 +129,17 @@ parfor ii = 1:N
     RBI = wahbaSolver(aVec,vIMat,vBMat);
     q = dcm2quat(RBI);
     
-%     tic    
+    %     tic
     imgRGBD = createImage(CArray, x(:,ii), q', V, sz, K);
-%     toc
+    %     toc
     
     %extract RGB info
     img = imgRGBD(:,:,1:3);
     
     %filter and display
-%     imgFilt = imgaussfilt(img,1.2);
-    imgFilt = img;
-    imshow(imgFilt);
+    imgFilt = imgaussfilt(img,1);
+    %     imgFilt = img;
+    %     imshow(img);
     
     imshow(imgFilt);
     
@@ -147,6 +147,6 @@ parfor ii = 1:N
     
     disp('Percent Complete:')
     disp(ii/N*100)
-
+    
 end
 toc
