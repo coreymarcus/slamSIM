@@ -21,10 +21,10 @@ for ii = 1:6
     ptsInWrld = C.faces{ii}.vertex;
     
     %translate to camera
-    ptsWrtCam = ptsInWrld - P;
+    ptsWrtCam = ptsInWrld - [P P P P];
     
     %rotate into camera frame
-    ptsInCam = quatrotate(q',ptsWrtCam')';
+    ptsInCam = quatrotateCoder(q',ptsWrtCam')';
     
     %find pixels
     for jj = 1:4

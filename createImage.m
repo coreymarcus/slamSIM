@@ -64,16 +64,16 @@ for kk = 1:Ncubes
     end
     
 %     parfor (ii = xIdxs, numWorkers)
-    for ii = xIdxs
+    for ii = xIdxs(1):xIdxs(end)
         
         %temporary row
         tempCol = [ones(length(yIdxs),3) zeros(length(yIdxs),1)];
         
-        for jj = yIdxs
+        for jj = yIdxs(1):yIdxs(end)
                          
             %get pixel vector and then rotate it into the inertial frame
             v = squeeze(V(jj,ii,:));
-            v = quatrotate(quatconj(q'),v')';
+            v = quatrotateCoder(quatconj(q'),v')';
             
             % check intersect
             [inter, D] = checkIntersect(C{kk}, P, v);
@@ -99,7 +99,9 @@ for kk = 1:Ncubes
             end
             
             %build temporary row
-            tempCol((yIdxs == jj),:) = Pix;
+            targRow = find(yIdxs == jj);
+            targRow = targRow(1);
+            tempCol(targRow,1:4) = Pix';
             
         end
         
@@ -111,7 +113,7 @@ for kk = 1:Ncubes
 end
 
 %create final output
-I = ones(height, width, 3);
+I = ones(height, width, 4);
 I(:,:,4) = zeros(height, width);
 
 for ii = 1:Ncubes %it might speed things up to integrate this loop with the one above
@@ -125,8 +127,8 @@ for ii = 1:Ncubes %it might speed things up to integrate this loop with the one 
             yIdxs = 1:height;
     end
     
-    for jj = yIdxs %note: a parfor loop is slower here
-        for kk = xIdxs
+    for jj = yIdxs(1):yIdxs(end) %note: a parfor loop is slower here
+        for kk = xIdxs(1):xIdxs(end)
             Targ = I(jj,kk,:);
             Pix = squeeze(Icell{ii}(jj,kk,:));
             

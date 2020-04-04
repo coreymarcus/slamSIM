@@ -27,7 +27,7 @@ for ii = 1:6
         t = (F.center(1) - P(1))/v(1);
     elseif(strcmp(F.plane,'y'))
         t = (F.center(2) - P(2))/v(2);        
-    elseif(strcmp(F.plane,'z'))
+    else %z plane
         t = (F.center(3) - P(3))/v(3);
     end
     
@@ -168,6 +168,9 @@ end
 
 %assign distance
 D = Y;
+
+%make sure I is one dimensional
+I = I(1);
 
 end
 

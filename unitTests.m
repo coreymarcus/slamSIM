@@ -16,7 +16,7 @@ fc = [1 0 0;
     1 0 1;
     0 1 1];
 
-ec = [1 1 1];
+ec = [.1 .1 .1];
 C = createCube(P, s, sw, fc, ec);
 
 %plot all the verticies to see if they're right
@@ -66,8 +66,18 @@ scatter3(Vunwrap(1,1:100:end), Vunwrap(2,1:100:end), Vunwrap(3,1:100:end));
 axis([-1 1 -1 1 0 2]);
 
 %% createImages
+CCell = cell(1);
+CCell{1} = C; %input is a cell vector of cubes
 sz = [width, height];
-img = createImage(C, x, q', V, sz);
+
+tic
+imgRGBD = createImage(CCell, x, q', V, sz, K);
+toc
+
+tic
+imgRGBD = createImage_mex(CCell, x, q', V, sz, K);img = imgRGBD(:,:,1:3);
+toc
+
 imgblur = imgaussfilt(img,0.5);
 imwrite(imgblur,'unitTestImage.png')
 

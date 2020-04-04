@@ -129,9 +129,9 @@ parfor ii = 1:N
     RBI = wahbaSolver(aVec,vIMat,vBMat);
     q = dcm2quat(RBI);
     
-    %     tic
-    imgRGBD = createImage(CArray, x(:,ii), q', V, sz, K);
-    %     toc
+    tic
+    imgRGBD = createImage_mex(CArray, x(:,ii), q', V, sz, K);
+    toc
     
     %extract RGB info
     img = imgRGBD(:,:,1:3);
