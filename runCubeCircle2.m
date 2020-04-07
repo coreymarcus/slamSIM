@@ -4,8 +4,15 @@ clear
 close all
 clc
 
-%path for wahba solver
-addpath('../matlabScripts/')
+
+%% Options
+
+% LIDAR
+LidarFOVHeight = pi/6; %radians
+LidarFOVWidth = pi/4; %radians
+LidarArrayWidth = 50;
+LidarArrayHeight = 50;
+lidarImageRate = 1; %one to create lidar image for every camera image
 
 %circle parameters
 R = 6; %radius
@@ -14,6 +21,11 @@ inc = .1; %magnitude of oscilations
 Revs = 4; %number of revolutions around the cube
 Noscil = 40.3333; %number of oscillations per revolution
 N = round(Revs*Nrev);
+
+
+%% Main
+%path for wahba solver
+addpath('../matlabScripts/')
 
 theta = linspace(0,2*pi*Revs,N);
 phi = (theta/(6*Revs)).*sin(3*theta) + inc*sin(Noscil*theta);
@@ -106,6 +118,40 @@ K = [f, 0, px;
 
 V = createPixelVectors(K,width,height);
 
+%create pixel assignments for lidar points
+%build lidar angle array
+LidarYawAngles = linspace(-LidarFOVWidth/2,LidarFOVWidth/2,LidarArrayWidth); 
+LidarPitchAngles = linspace(LidarFOVHeight/2,-LidarFOVHeight/2,LidarArrayHeight); %note intentional sign reversal
+lidarPixelMatches = zeros(LidarArrayHeight,LidarArrayWidth,2);
+for ii = 1:LidarArrayWidth
+    for jj = 1:LidarArrayHeight
+        %create vector corresponding to these angles
+        r = zeros(3,1);
+        r(1) = sin(LidarYawAngles(ii));
+        r(2) = -tan(LidarPitchAngles(jj));
+        r(3) = cos(LidarYawAngles(ii));
+        
+        %map to pixels
+        pbar = K*r;
+        p = zeros(2,1);
+        p(1) = round(pbar(1)/pbar(3));
+        p(2) = round(pbar(2)/pbar(3));
+        
+        lidarPixelMatches(jj,ii,:) = p;
+        
+    end
+end
+
+%putput pixels to make sure everything is correct
+figure
+hold on
+scatter(lidarPixelMatches(1,1,1),lidarPixelMatches(1,1,2))
+scatter(lidarPixelMatches(1,end,1),lidarPixelMatches(1,end,2))
+scatter(lidarPixelMatches(end,end,1),lidarPixelMatches(end,end,2))
+scatter(lidarPixelMatches(end,1,1),lidarPixelMatches(end,1,2))
+legend('UL','UR','LR','LL','Location','best')
+set(gca, 'YDir','reverse')
+
 %run through and create an image at each point, always pointing towards the
 %center
 vz = [0; 0; 1];
@@ -113,7 +159,9 @@ vx = [1; 0; 0];
 vBMat = [vx'; vz'];
 aVec = [1; 1];
 
-figure
+imgFig = figure;
+imgDFig = figure;
+lidarFig = figure;
 tic
 parfor ii = 1:N
     
@@ -137,15 +185,30 @@ parfor ii = 1:N
     
     %extract RGB info
     img = imgRGBD(:,:,1:3);
+    imgD = imgRGBD(:,:,4);
+    imgLidar = createLidarImage(imgD, lidarPixelMatches);
     
     %filter and display
     imgFilt = imgaussfilt(img,1);
     %     imgFilt = img;
     %     imshow(img);
     
+    figure(imgFig);
     imshow(imgFilt);
     
+    figure(imgDFig)
+    s = surf(imgD);
+    s.EdgeColor = 'interp';
+    view([0 0 -1])
+    
+    figure(lidarFig)
+    s = surf(imgLidar);
+    s.EdgeColor = 'interp';
+    view([0 0 -1])
+    
     imwrite(imgFilt,strcat('images/cubeCircling',num2str(ii,'%04i'),'.jpg'))
+    dlmwrite(strcat('lidarImages/cubeCircling',num2str(ii,'%04i'),'.csv'),imgLidar,...
+        'precision','%.4f')
     
     disp('Percent Complete:')
     disp(ii/N*100)
