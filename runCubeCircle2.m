@@ -164,11 +164,11 @@ imgFig = figure;
 imgDFig = figure;
 lidarFig = figure;
 
-
-tic
+%generate quaternions
+qArray = zeros(N,4);
 for ii = 1:N
     
-    %create the quaternion for this location
+        %create the quaternion for this location
     imFoc = [0 0 0]'; %point the image is centered on
     vz_I = imFoc - x(:,ii); %camera z-axis in the inertial frame
     vx_I = [vz_I(2); -vz_I(1); 0]; %camera x-axis in the inertial frame
@@ -181,9 +181,23 @@ for ii = 1:N
     vIMat = [vx_I'; vz_I'];
     RBI = wahbaSolver(aVec,vIMat,vBMat);
     q = dcm2quat(RBI);
+    qArray(ii,:) = q;
+    
+end
+
+%write out truth data
+truth.CArray = CArray;
+truth.traj = x;
+truth.quat = qArray;
+save('slamSIM_truth.mat','truth');
+
+%create all the images
+tic
+parfor ii = 1:N
+
     
 %     tic
-    imgRGBD = createImage_mex(CArray, x(:,ii), q', V, sz, K);
+    imgRGBD = createImage_mex(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
 %     toc
     
     %extract RGB info
