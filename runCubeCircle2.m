@@ -16,9 +16,9 @@ lidarImageRate = 1; %one to create lidar image for every camera image
 
 %circle parameters
 R = 6; %radius
-Nrev = 2500; %number of images per revolution
-inc = .1; %magnitude of oscilations
-Revs = 4; %number of revolutions around the cube
+Nrev = 4000; %number of images per revolution
+inc = .5; %magnitude of oscilations
+Revs = 1; %number of revolutions around the cube
 Noscil = 40.3333; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
@@ -28,7 +28,8 @@ N = round(Revs*Nrev);
 addpath('../matlabScripts/')
 
 theta = linspace(0,2*pi*Revs,N);
-phi = (theta/(6*Revs)).*sin(3*theta) + inc*sin(Noscil*theta);
+% phi = (theta/(6*Revs)).*sin(3*theta) + inc*sin(Noscil*theta);
+phi = inc*sin(Noscil*theta);
 x = zeros(3,N);
 for ii = 1:N
     x(1,ii) = R*cos(theta(ii))*cos(phi(ii));
