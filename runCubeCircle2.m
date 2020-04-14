@@ -162,8 +162,10 @@ aVec = [1; 1];
 imgFig = figure;
 imgDFig = figure;
 lidarFig = figure;
+
+
 tic
-parfor ii = 1:N
+for ii = 1:N
     
     %create the quaternion for this location
     imFoc = [0 0 0]'; %point the image is centered on
