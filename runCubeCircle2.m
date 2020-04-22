@@ -185,13 +185,8 @@ for ii = 1:N
     
 end
 
-%write out truth data
-truth.CArray = CArray;
-truth.traj = x;
-truth.quat = qArray;
-save('slamSIM_truth.mat','truth');
-
 %create all the images
+imgDArray = zeros(sz(2),sz(1),N);
 tic
 parfor ii = 1:N
 
@@ -204,6 +199,9 @@ parfor ii = 1:N
     img = imgRGBD(:,:,1:3);
     imgD = imgRGBD(:,:,4);
     imgLidar = createLidarImage(imgD, lidarPixelMatches);
+    
+    %save Depth
+    imgDArray(:,:,ii) = imgD;
     
     %filter and display
     imgFilt = imgaussfilt(img,1);
@@ -232,3 +230,10 @@ parfor ii = 1:N
     
 end
 toc
+
+%write out truth data
+truth.CArray = CArray;
+truth.traj = x;
+truth.quat = qArray;
+truth.depth = imgDArray;
+save('slamSIM_truth.mat','truth');
