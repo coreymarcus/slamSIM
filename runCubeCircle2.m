@@ -236,4 +236,4 @@ truth.CArray = CArray;
 truth.traj = x;
 truth.quat = qArray;
 truth.depth = imgDArray;
-save('slamSIM_truth.mat','truth');
+save('slamSIM_truth.mat','truth','-v7.3');
