@@ -16,10 +16,10 @@ lidarImageRate = 1; %one to create lidar image for every camera image
 
 %circle parameters
 R = 6; %radius
-Nrev = 4000; %number of images per revolution
+Nrev = 10000; %number of images per revolution
 inc = .5; %magnitude of oscilations
-Revs = 1; %number of revolutions around the cube
-Noscil = 40.3333; %number of oscillations per revolution
+Revs = .5; %number of revolutions around the cube
+Noscil = 70; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
 
