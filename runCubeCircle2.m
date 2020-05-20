@@ -129,17 +129,18 @@ V = createPixelVectors(K,width,height);
 
 %create pixel assignments for lidar points
 %build lidar angle array
-LidarYawAngles = linspace(-LidarFOVWidth/2,LidarFOVWidth/2,LidarArrayWidth); 
-LidarPitchAngles = linspace(LidarFOVHeight/2,-LidarFOVHeight/2,LidarArrayHeight); %note intentional sign reversal
+LidarYawAngles = linspace(LidarFOVWidth/2,-LidarFOVWidth/2,LidarArrayWidth);  %note intentional sign reversal
+LidarPitchAngles = linspace(-LidarFOVHeight/2,LidarFOVHeight/2,LidarArrayHeight);
 lidarPixelMatches = zeros(LidarArrayHeight,LidarArrayWidth,2);
 for ii = 1:LidarArrayWidth
     for jj = 1:LidarArrayHeight
         %create vector corresponding to these angles
         r = zeros(3,1);
-        r(1) = sin(LidarYawAngles(ii));
-        r(2) = -tan(LidarPitchAngles(jj));
-        r(3) = cos(LidarYawAngles(ii));
-        
+        r(2) = sin(LidarPitchAngles(jj));
+        r13 = cos(LidarPitchAngles(jj));
+        r(1) = -r13*sin(LidarYawAngles(ii));
+        r(3) = r13*cos(LidarYawAngles(ii));
+                
         %map to pixels
         pbar = K*r;
         p = zeros(2,1);
@@ -204,7 +205,7 @@ else
     idxs = 1:N;
 end
 
-parfor ii = idxs
+for ii = idxs
 
     
 %     tic

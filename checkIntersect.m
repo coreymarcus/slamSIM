@@ -8,10 +8,10 @@ function [I, D] = checkIntersect(C, P, v)
 % Outputs
 % I = 0 if no intersect, i if hitting the ith face (1:6), 7 if hitting an
 %   edge
-% D = distance to cube, 0 if no intersect
+% D = depth to cube, 0 if no intersect
 
 
-%initialize distance
+%initialize depth
 D = 0;
 
 %initialize detection logic
@@ -167,7 +167,8 @@ if(edgeHit(I) == 1)
 end
 
 %assign distance
-D = Y;
+vBar = Y*v;
+D = vBar(3);
 
 %make sure I is one dimensional
 I = I(1);
