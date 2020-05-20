@@ -22,6 +22,14 @@ Revs = .5; %number of revolutions around the cube
 Noscil = 70; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
+%control if we used compiled code for image generation
+useMexForImgGen = false;
+
+%true depth data is massive, run this if you only want to create and save
+%it at the target index
+targIdx = 2501;
+runTargOnly = true;
+
 
 %% Main
 %path for wahba solver
@@ -188,11 +196,24 @@ end
 %create all the images
 imgDArray = zeros(sz(2),sz(1),N);
 tic
-parfor ii = 1:N
+
+%control which images are created
+if(runTargOnly)
+    idxs = targIdx;
+else
+    idxs = 1:N;
+end
+
+parfor ii = idxs
 
     
 %     tic
-    imgRGBD = createImage_mex(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
+    if(useMexForImgGen)
+        imgRGBD = createImage_mex(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
+    else
+        imgRGBD = createImage(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
+    end
+        
 %     toc
     
     %extract RGB info
