@@ -205,7 +205,7 @@ else
     idxs = 1:N;
 end
 
-for ii = idxs
+parfor ii = idxs
 
     
 %     tic
