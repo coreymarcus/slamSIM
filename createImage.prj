@@ -1,7 +1,7 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="2062297351" file="C:\Users\cm58349\Github\slamSIM\createImage.prj" location="C:\Users\cm58349\Github\slamSIM" name="createImage" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="3180810641" file="C:\Users\cm58349\Github\slamSIM\createImage.prj" location="C:\Users\cm58349\Github\slamSIM" name="createImage" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
-      <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
+      <param.BuiltInstrumentedMex />
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
       <param.WorkingFolder>option.WorkingFolder.Project</param.WorkingFolder>
       <param.SpecifiedWorkingFolder />
@@ -59,7 +59,7 @@
       <param.ConstantInputs>option.ConstantInputs.CheckValues</param.ConstantInputs>
       <param.EnableCRICodeCoverage>true</param.EnableCRICodeCoverage>
       <param.EnableJIT>false</param.EnableJIT>
-      <param.EnableJITSilentBailOut>false</param.EnableJITSilentBailOut>
+      <param.EnableJITSilentBailOut />
       <param.CheckForIssuesJIT>true</param.CheckForIssuesJIT>
       <unset>
         <param.BuiltInstrumentedMex />
@@ -187,7 +187,7 @@
       <param.CustomSource />
       <param.CustomLibrary />
       <param.PostCodeGenCommand />
-      <param.TargetLangStandard>C++03 (ISO)</param.TargetLangStandard>
+      <param.TargetLangStandard>C89/C90 (ANSI)</param.TargetLangStandard>
       <param.CodeReplacementLibrary>None</param.CodeReplacementLibrary>
       <param.DeprecatedCRLFlag>false</param.DeprecatedCRLFlag>
       <param.SameHardware>true</param.SameHardware>
@@ -797,12 +797,12 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen\lib\createImage</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>C_CODE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>2062297351</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>3531036618</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen\mex\createImage</var.cfi.lastOutputRoot>
     <var.cfi.preBuildChecksum>4164604688</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>runCubeCircle2.m</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\checkIntersect.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\createImage.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\locateVerticies.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\quat2dcmCoder.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\quatrotateCoder.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3427643649&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\checkIntersect.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\createImage.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\locateVerticies.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\quat2dcmCoder.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\quatrotateCoder.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;2609579719&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
     <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\checkIntersect.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\createImage.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\locateVerticies.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\quat2dcmCoder.m&lt;/file&gt;&lt;file&gt;C:\Users\cm58349\Github\slamSIM\quatrotateCoder.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>

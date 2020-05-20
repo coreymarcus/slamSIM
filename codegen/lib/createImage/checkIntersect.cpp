@@ -47,8 +47,8 @@ void b_checkIntersect(double C_sw, const struct1_T C_faces[6], const double P[3]
   /*  Outputs */
   /*  I = 0 if no intersect, i if hitting the ith face (1:6), 7 if hitting an */
   /*    edge */
-  /*  D = distance to cube, 0 if no intersect */
-  /* initialize distance */
+  /*  D = depth to cube, 0 if no intersect */
+  /* initialize depth */
   *D = 0.0;
 
   /* initialize detection logic */
@@ -1073,8 +1073,8 @@ void checkIntersect(double C_sw, const struct1_T C_faces[6], const double P[3],
   /*  Outputs */
   /*  I = 0 if no intersect, i if hitting the ith face (1:6), 7 if hitting an */
   /*    edge */
-  /*  D = distance to cube, 0 if no intersect */
-  /* initialize distance */
+  /*  D = depth to cube, 0 if no intersect */
+  /* initialize depth */
   *D = 0.0;
 
   /* initialize detection logic */

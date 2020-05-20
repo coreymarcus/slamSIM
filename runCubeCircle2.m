@@ -23,7 +23,7 @@ Noscil = 70; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
 %control if we used compiled code for image generation
-useMexForImgGen = false;
+useMexForImgGen = true;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index

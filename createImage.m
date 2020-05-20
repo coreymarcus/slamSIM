@@ -72,17 +72,18 @@ for kk = 1:Ncubes
         for jj = yIdxs(1):yIdxs(end)
                          
             %get pixel vector and then rotate it into the inertial frame
-            v = squeeze(V(jj,ii,:));
-            v = quatrotateCoder(quatconj(q'),v')';
+            vCam = squeeze(V(jj,ii,:));
+            vInert = quatrotateCoder(quatconj(q'),vCam')';
             
             % check intersect
-            [inter, D] = checkIntersect(C{kk}, P, v);
+            [inter, D] = checkIntersect(C{kk}, P, vInert);
             
             %intitialize pixel
             Pix = zeros(4,1);
             
             %assign distance
-            Pix(4) = D;
+            rBar = D*vCam;
+            Pix(4) = rBar(3);
             
             if(inter == 0) 
                 %we hit nothing

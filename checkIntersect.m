@@ -167,8 +167,7 @@ if(edgeHit(I) == 1)
 end
 
 %assign distance
-vBar = Y*v;
-D = vBar(3);
+D = Y;
 
 %make sure I is one dimensional
 I = I(1);

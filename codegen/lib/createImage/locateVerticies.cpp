@@ -10,7 +10,7 @@
  */
 
 /* Include files */
-#include <cmath>
+#include <math.h>
 #include "rt_nonfinite.h"
 #include "createImage.h"
 #include "locateVerticies.h"
@@ -23,13 +23,13 @@ static double rt_roundd_snf(double u);
 static double rt_roundd_snf(double u)
 {
   double y;
-  if (std::abs(u) < 4.503599627370496E+15) {
+  if (fabs(u) < 4.503599627370496E+15) {
     if (u >= 0.5) {
-      y = std::floor(u + 0.5);
+      y = floor(u + 0.5);
     } else if (u > -0.5) {
       y = u * 0.0;
     } else {
-      y = std::ceil(u - 0.5);
+      y = ceil(u - 0.5);
     }
   } else {
     y = u;

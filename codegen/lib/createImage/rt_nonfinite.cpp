@@ -15,8 +15,8 @@
  *      (Inf, NaN and -Inf).
  */
 #include "rt_nonfinite.h"
-#include <cmath>
-#include <limits>
+#include "rtGetNaN.h"
+#include "rtGetInf.h"
 
 real_T rtInf;
 real_T rtMinusInf;
@@ -33,12 +33,12 @@ real32_T rtNaNF;
 void rt_InitInfAndNaN(size_t realSize)
 {
   (void)realSize;
-  rtNaN = std::numeric_limits<real_T>::quiet_NaN();
-  rtNaNF = std::numeric_limits<real32_T>::quiet_NaN();
-  rtInf = std::numeric_limits<real_T>::infinity();
-  rtInfF = std::numeric_limits<real32_T>::infinity();
-  rtMinusInf = -std::numeric_limits<real_T>::infinity();
-  rtMinusInfF = -std::numeric_limits<real32_T>::infinity();
+  rtNaN = rtGetNaN();
+  rtNaNF = rtGetNaNF();
+  rtInf = rtGetInf();
+  rtInfF = rtGetInfF();
+  rtMinusInf = rtGetMinusInf();
+  rtMinusInfF = rtGetMinusInfF();
 }
 
 /* Function: rtIsInf ==================================================

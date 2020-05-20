@@ -10,7 +10,7 @@
  */
 
 /* Include files */
-#include <cmath>
+#include <math.h>
 #include "rt_nonfinite.h"
 #include "createImage.h"
 #include "quat2dcmCoder.h"
@@ -53,7 +53,7 @@ void quat2dcmCoder(const double q[4], double dcm[9])
     qm += z1[k + 1];
   }
 
-  qm = std::sqrt(qm);
+  qm = sqrt(qm);
   for (k = 0; k < 4; k++) {
     qin[k] /= qm;
   }

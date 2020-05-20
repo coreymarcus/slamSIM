@@ -10,7 +10,7 @@
  */
 
 /* Include files */
-#include <cmath>
+#include <math.h>
 #include "rt_nonfinite.h"
 #include "createImage.h"
 #include "createImage_emxutil.h"
@@ -522,17 +522,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[0]) == bounds[0]) {
+  } else if (floor(bounds[0]) == bounds[0]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[11] - bounds[0]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[11] - bounds[0]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[11] - bounds[0]);
+    idx = (int)floor(bounds[11] - bounds[0]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[0] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[11] - bounds[0]) + 0.5);
+    xMin = floor((bounds[11] - bounds[0]) + 0.5);
     xMax = bounds[0] + xMin;
     yMin = xMax - bounds[11];
     yMax = bounds[0];
@@ -541,7 +541,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[11];
     } else if (yMin > 0.0) {
@@ -599,17 +599,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[22]) == bounds[22]) {
+  } else if (floor(bounds[22]) == bounds[22]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[33] - bounds[22]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[33] - bounds[22]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[33] - bounds[22]);
+    idx = (int)floor(bounds[33] - bounds[22]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[22] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[33] - bounds[22]) + 0.5);
+    xMin = floor((bounds[33] - bounds[22]) + 0.5);
     xMax = bounds[22] + xMin;
     yMin = xMax - bounds[33];
     yMax = bounds[22];
@@ -618,7 +618,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[33];
     } else if (yMin > 0.0) {
@@ -808,7 +808,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -952,17 +952,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[1]) == bounds[1]) {
+  } else if (floor(bounds[1]) == bounds[1]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[12] - bounds[1]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[12] - bounds[1]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[12] - bounds[1]);
+    idx = (int)floor(bounds[12] - bounds[1]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[1] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[12] - bounds[1]) + 0.5);
+    xMin = floor((bounds[12] - bounds[1]) + 0.5);
     xMax = bounds[1] + xMin;
     yMin = xMax - bounds[12];
     yMax = bounds[1];
@@ -971,7 +971,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[12];
     } else if (yMin > 0.0) {
@@ -1028,17 +1028,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[23]) == bounds[23]) {
+  } else if (floor(bounds[23]) == bounds[23]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[34] - bounds[23]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[34] - bounds[23]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[34] - bounds[23]);
+    idx = (int)floor(bounds[34] - bounds[23]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[23] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[34] - bounds[23]) + 0.5);
+    xMin = floor((bounds[34] - bounds[23]) + 0.5);
     xMax = bounds[23] + xMin;
     yMin = xMax - bounds[34];
     yMax = bounds[23];
@@ -1047,7 +1047,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[34];
     } else if (yMin > 0.0) {
@@ -1232,7 +1232,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -1375,17 +1375,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[2]) == bounds[2]) {
+  } else if (floor(bounds[2]) == bounds[2]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[13] - bounds[2]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[13] - bounds[2]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[13] - bounds[2]);
+    idx = (int)floor(bounds[13] - bounds[2]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[2] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[13] - bounds[2]) + 0.5);
+    xMin = floor((bounds[13] - bounds[2]) + 0.5);
     xMax = bounds[2] + xMin;
     yMin = xMax - bounds[13];
     yMax = bounds[2];
@@ -1394,7 +1394,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[13];
     } else if (yMin > 0.0) {
@@ -1451,17 +1451,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[24]) == bounds[24]) {
+  } else if (floor(bounds[24]) == bounds[24]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[35] - bounds[24]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[35] - bounds[24]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[35] - bounds[24]);
+    idx = (int)floor(bounds[35] - bounds[24]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[24] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[35] - bounds[24]) + 0.5);
+    xMin = floor((bounds[35] - bounds[24]) + 0.5);
     xMax = bounds[24] + xMin;
     yMin = xMax - bounds[35];
     yMax = bounds[24];
@@ -1470,7 +1470,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[35];
     } else if (yMin > 0.0) {
@@ -1655,7 +1655,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -1798,17 +1798,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[3]) == bounds[3]) {
+  } else if (floor(bounds[3]) == bounds[3]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[14] - bounds[3]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[14] - bounds[3]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[14] - bounds[3]);
+    idx = (int)floor(bounds[14] - bounds[3]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[3] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[14] - bounds[3]) + 0.5);
+    xMin = floor((bounds[14] - bounds[3]) + 0.5);
     xMax = bounds[3] + xMin;
     yMin = xMax - bounds[14];
     yMax = bounds[3];
@@ -1817,7 +1817,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[14];
     } else if (yMin > 0.0) {
@@ -1874,17 +1874,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[25]) == bounds[25]) {
+  } else if (floor(bounds[25]) == bounds[25]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[36] - bounds[25]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[36] - bounds[25]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[36] - bounds[25]);
+    idx = (int)floor(bounds[36] - bounds[25]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[25] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[36] - bounds[25]) + 0.5);
+    xMin = floor((bounds[36] - bounds[25]) + 0.5);
     xMax = bounds[25] + xMin;
     yMin = xMax - bounds[36];
     yMax = bounds[25];
@@ -1893,7 +1893,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[36];
     } else if (yMin > 0.0) {
@@ -2078,7 +2078,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -2221,17 +2221,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[4]) == bounds[4]) {
+  } else if (floor(bounds[4]) == bounds[4]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[15] - bounds[4]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[15] - bounds[4]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[15] - bounds[4]);
+    idx = (int)floor(bounds[15] - bounds[4]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[4] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[15] - bounds[4]) + 0.5);
+    xMin = floor((bounds[15] - bounds[4]) + 0.5);
     xMax = bounds[4] + xMin;
     yMin = xMax - bounds[15];
     yMax = bounds[4];
@@ -2240,7 +2240,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[15];
     } else if (yMin > 0.0) {
@@ -2297,17 +2297,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[26]) == bounds[26]) {
+  } else if (floor(bounds[26]) == bounds[26]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[37] - bounds[26]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[37] - bounds[26]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[37] - bounds[26]);
+    idx = (int)floor(bounds[37] - bounds[26]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[26] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[37] - bounds[26]) + 0.5);
+    xMin = floor((bounds[37] - bounds[26]) + 0.5);
     xMax = bounds[26] + xMin;
     yMin = xMax - bounds[37];
     yMax = bounds[26];
@@ -2316,7 +2316,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[37];
     } else if (yMin > 0.0) {
@@ -2501,7 +2501,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -2644,17 +2644,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[5]) == bounds[5]) {
+  } else if (floor(bounds[5]) == bounds[5]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[16] - bounds[5]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[16] - bounds[5]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[16] - bounds[5]);
+    idx = (int)floor(bounds[16] - bounds[5]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[5] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[16] - bounds[5]) + 0.5);
+    xMin = floor((bounds[16] - bounds[5]) + 0.5);
     xMax = bounds[5] + xMin;
     yMin = xMax - bounds[16];
     yMax = bounds[5];
@@ -2663,7 +2663,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[16];
     } else if (yMin > 0.0) {
@@ -2720,17 +2720,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[27]) == bounds[27]) {
+  } else if (floor(bounds[27]) == bounds[27]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[38] - bounds[27]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[38] - bounds[27]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[38] - bounds[27]);
+    idx = (int)floor(bounds[38] - bounds[27]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[27] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[38] - bounds[27]) + 0.5);
+    xMin = floor((bounds[38] - bounds[27]) + 0.5);
     xMax = bounds[27] + xMin;
     yMin = xMax - bounds[38];
     yMax = bounds[27];
@@ -2739,7 +2739,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[38];
     } else if (yMin > 0.0) {
@@ -2924,7 +2924,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -3067,17 +3067,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[6]) == bounds[6]) {
+  } else if (floor(bounds[6]) == bounds[6]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[17] - bounds[6]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[17] - bounds[6]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[17] - bounds[6]);
+    idx = (int)floor(bounds[17] - bounds[6]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[6] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[17] - bounds[6]) + 0.5);
+    xMin = floor((bounds[17] - bounds[6]) + 0.5);
     xMax = bounds[6] + xMin;
     yMin = xMax - bounds[17];
     yMax = bounds[6];
@@ -3086,7 +3086,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[17];
     } else if (yMin > 0.0) {
@@ -3143,17 +3143,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[28]) == bounds[28]) {
+  } else if (floor(bounds[28]) == bounds[28]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[39] - bounds[28]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[39] - bounds[28]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[39] - bounds[28]);
+    idx = (int)floor(bounds[39] - bounds[28]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[28] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[39] - bounds[28]) + 0.5);
+    xMin = floor((bounds[39] - bounds[28]) + 0.5);
     xMax = bounds[28] + xMin;
     yMin = xMax - bounds[39];
     yMax = bounds[28];
@@ -3162,7 +3162,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[39];
     } else if (yMin > 0.0) {
@@ -3225,9 +3225,9 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     } else {
       i0 = xIdxs->size[0] * xIdxs->size[1];
       xIdxs->size[0] = 1;
-      xIdxs->size[1] = (int)std::floor(sz[0] - 1.0) + 1;
+      xIdxs->size[1] = (int)floor(sz[0] - 1.0) + 1;
       emxEnsureCapacity_real_T1(xIdxs, i0);
-      idx = (int)std::floor(sz[0] - 1.0);
+      idx = (int)floor(sz[0] - 1.0);
       for (i0 = 0; i0 <= idx; i0++) {
         xIdxs->data[xIdxs->size[0] * i0] = 1.0 + (double)i0;
       }
@@ -3253,9 +3253,9 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     } else {
       i0 = yIdxs->size[0] * yIdxs->size[1];
       yIdxs->size[0] = 1;
-      yIdxs->size[1] = (int)std::floor(sz[1] - 1.0) + 1;
+      yIdxs->size[1] = (int)floor(sz[1] - 1.0) + 1;
       emxEnsureCapacity_real_T1(yIdxs, i0);
-      idx = (int)std::floor(sz[1] - 1.0);
+      idx = (int)floor(sz[1] - 1.0);
       for (i0 = 0; i0 <= idx; i0++) {
         yIdxs->data[yIdxs->size[0] * i0] = 1.0 + (double)i0;
       }
@@ -3407,7 +3407,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -3550,17 +3550,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[7]) == bounds[7]) {
+  } else if (floor(bounds[7]) == bounds[7]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[18] - bounds[7]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[18] - bounds[7]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[18] - bounds[7]);
+    idx = (int)floor(bounds[18] - bounds[7]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[7] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[18] - bounds[7]) + 0.5);
+    xMin = floor((bounds[18] - bounds[7]) + 0.5);
     xMax = bounds[7] + xMin;
     yMin = xMax - bounds[18];
     yMax = bounds[7];
@@ -3569,7 +3569,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[18];
     } else if (yMin > 0.0) {
@@ -3626,17 +3626,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[29]) == bounds[29]) {
+  } else if (floor(bounds[29]) == bounds[29]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[40] - bounds[29]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[40] - bounds[29]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[40] - bounds[29]);
+    idx = (int)floor(bounds[40] - bounds[29]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[29] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[40] - bounds[29]) + 0.5);
+    xMin = floor((bounds[40] - bounds[29]) + 0.5);
     xMax = bounds[29] + xMin;
     yMin = xMax - bounds[40];
     yMax = bounds[29];
@@ -3645,7 +3645,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[40];
     } else if (yMin > 0.0) {
@@ -3830,7 +3830,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -3973,17 +3973,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[8]) == bounds[8]) {
+  } else if (floor(bounds[8]) == bounds[8]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[19] - bounds[8]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[19] - bounds[8]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[19] - bounds[8]);
+    idx = (int)floor(bounds[19] - bounds[8]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[8] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[19] - bounds[8]) + 0.5);
+    xMin = floor((bounds[19] - bounds[8]) + 0.5);
     xMax = bounds[8] + xMin;
     yMin = xMax - bounds[19];
     yMax = bounds[8];
@@ -3992,7 +3992,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[19];
     } else if (yMin > 0.0) {
@@ -4049,17 +4049,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[30]) == bounds[30]) {
+  } else if (floor(bounds[30]) == bounds[30]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[41] - bounds[30]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[41] - bounds[30]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[41] - bounds[30]);
+    idx = (int)floor(bounds[41] - bounds[30]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[30] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[41] - bounds[30]) + 0.5);
+    xMin = floor((bounds[41] - bounds[30]) + 0.5);
     xMax = bounds[30] + xMin;
     yMin = xMax - bounds[41];
     yMax = bounds[30];
@@ -4068,7 +4068,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[41];
     } else if (yMin > 0.0) {
@@ -4253,7 +4253,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -4396,17 +4396,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[9]) == bounds[9]) {
+  } else if (floor(bounds[9]) == bounds[9]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[20] - bounds[9]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[20] - bounds[9]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[20] - bounds[9]);
+    idx = (int)floor(bounds[20] - bounds[9]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[9] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[20] - bounds[9]) + 0.5);
+    xMin = floor((bounds[20] - bounds[9]) + 0.5);
     xMax = bounds[9] + xMin;
     yMin = xMax - bounds[20];
     yMax = bounds[9];
@@ -4415,7 +4415,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[20];
     } else if (yMin > 0.0) {
@@ -4472,17 +4472,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[31]) == bounds[31]) {
+  } else if (floor(bounds[31]) == bounds[31]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[42] - bounds[31]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[42] - bounds[31]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[42] - bounds[31]);
+    idx = (int)floor(bounds[42] - bounds[31]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[31] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[42] - bounds[31]) + 0.5);
+    xMin = floor((bounds[42] - bounds[31]) + 0.5);
     xMax = bounds[31] + xMin;
     yMin = xMax - bounds[42];
     yMax = bounds[31];
@@ -4491,7 +4491,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[42];
     } else if (yMin > 0.0) {
@@ -4676,7 +4676,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -4820,17 +4820,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[10]) == bounds[10]) {
+  } else if (floor(bounds[10]) == bounds[10]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[21] - bounds[10]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[21] - bounds[10]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[21] - bounds[10]);
+    idx = (int)floor(bounds[21] - bounds[10]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[10] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[21] - bounds[10]) + 0.5);
+    xMin = floor((bounds[21] - bounds[10]) + 0.5);
     xMax = bounds[10] + xMin;
     yMin = xMax - bounds[21];
     yMax = bounds[10];
@@ -4839,7 +4839,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[21];
     } else if (yMin > 0.0) {
@@ -4896,17 +4896,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[32]) == bounds[32]) {
+  } else if (floor(bounds[32]) == bounds[32]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[43] - bounds[32]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[43] - bounds[32]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[43] - bounds[32]);
+    idx = (int)floor(bounds[43] - bounds[32]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[32] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[43] - bounds[32]) + 0.5);
+    xMin = floor((bounds[43] - bounds[32]) + 0.5);
     xMax = bounds[32] + xMin;
     yMin = xMax - bounds[43];
     yMax = bounds[32];
@@ -4915,7 +4915,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[43];
     } else if (yMin > 0.0) {
@@ -5100,7 +5100,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       }
 
       /* assign distance */
-      Verts[3] = yMin;
+      Verts[3] = yMin * V[((int)yMax + 480 * ((int)xMin - 1)) + 614399];
       if (!(xMax == 0.0)) {
         if (xMax == 7.0) {
           /* we hit an edge */
@@ -5247,17 +5247,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[0]) == bounds[0]) {
+  } else if (floor(bounds[0]) == bounds[0]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[11] - bounds[0]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[11] - bounds[0]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[11] - bounds[0]);
+    idx = (int)floor(bounds[11] - bounds[0]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[0] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[11] - bounds[0]) + 0.5);
+    xMin = floor((bounds[11] - bounds[0]) + 0.5);
     xMax = bounds[0] + xMin;
     yMin = xMax - bounds[11];
     yMax = bounds[0];
@@ -5266,7 +5266,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[11];
     } else if (yMin > 0.0) {
@@ -5323,17 +5323,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[22]) == bounds[22]) {
+  } else if (floor(bounds[22]) == bounds[22]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[33] - bounds[22]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[33] - bounds[22]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[33] - bounds[22]);
+    idx = (int)floor(bounds[33] - bounds[22]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[22] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[33] - bounds[22]) + 0.5);
+    xMin = floor((bounds[33] - bounds[22]) + 0.5);
     xMax = bounds[22] + xMin;
     yMin = xMax - bounds[33];
     yMax = bounds[22];
@@ -5342,7 +5342,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[33];
     } else if (yMin > 0.0) {
@@ -5441,17 +5441,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[1]) == bounds[1]) {
+  } else if (floor(bounds[1]) == bounds[1]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[12] - bounds[1]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[12] - bounds[1]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[12] - bounds[1]);
+    idx = (int)floor(bounds[12] - bounds[1]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[1] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[12] - bounds[1]) + 0.5);
+    xMin = floor((bounds[12] - bounds[1]) + 0.5);
     xMax = bounds[1] + xMin;
     yMin = xMax - bounds[12];
     yMax = bounds[1];
@@ -5460,7 +5460,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[12];
     } else if (yMin > 0.0) {
@@ -5517,17 +5517,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[23]) == bounds[23]) {
+  } else if (floor(bounds[23]) == bounds[23]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[34] - bounds[23]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[34] - bounds[23]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[34] - bounds[23]);
+    idx = (int)floor(bounds[34] - bounds[23]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[23] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[34] - bounds[23]) + 0.5);
+    xMin = floor((bounds[34] - bounds[23]) + 0.5);
     xMax = bounds[23] + xMin;
     yMin = xMax - bounds[34];
     yMax = bounds[23];
@@ -5536,7 +5536,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[34];
     } else if (yMin > 0.0) {
@@ -5635,17 +5635,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[2]) == bounds[2]) {
+  } else if (floor(bounds[2]) == bounds[2]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[13] - bounds[2]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[13] - bounds[2]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[13] - bounds[2]);
+    idx = (int)floor(bounds[13] - bounds[2]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[2] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[13] - bounds[2]) + 0.5);
+    xMin = floor((bounds[13] - bounds[2]) + 0.5);
     xMax = bounds[2] + xMin;
     yMin = xMax - bounds[13];
     yMax = bounds[2];
@@ -5654,7 +5654,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[13];
     } else if (yMin > 0.0) {
@@ -5711,17 +5711,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[24]) == bounds[24]) {
+  } else if (floor(bounds[24]) == bounds[24]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[35] - bounds[24]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[35] - bounds[24]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[35] - bounds[24]);
+    idx = (int)floor(bounds[35] - bounds[24]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[24] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[35] - bounds[24]) + 0.5);
+    xMin = floor((bounds[35] - bounds[24]) + 0.5);
     xMax = bounds[24] + xMin;
     yMin = xMax - bounds[35];
     yMax = bounds[24];
@@ -5730,7 +5730,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[35];
     } else if (yMin > 0.0) {
@@ -5829,17 +5829,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[3]) == bounds[3]) {
+  } else if (floor(bounds[3]) == bounds[3]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[14] - bounds[3]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[14] - bounds[3]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[14] - bounds[3]);
+    idx = (int)floor(bounds[14] - bounds[3]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[3] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[14] - bounds[3]) + 0.5);
+    xMin = floor((bounds[14] - bounds[3]) + 0.5);
     xMax = bounds[3] + xMin;
     yMin = xMax - bounds[14];
     yMax = bounds[3];
@@ -5848,7 +5848,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[14];
     } else if (yMin > 0.0) {
@@ -5905,17 +5905,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[25]) == bounds[25]) {
+  } else if (floor(bounds[25]) == bounds[25]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[36] - bounds[25]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[36] - bounds[25]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[36] - bounds[25]);
+    idx = (int)floor(bounds[36] - bounds[25]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[25] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[36] - bounds[25]) + 0.5);
+    xMin = floor((bounds[36] - bounds[25]) + 0.5);
     xMax = bounds[25] + xMin;
     yMin = xMax - bounds[36];
     yMax = bounds[25];
@@ -5924,7 +5924,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[36];
     } else if (yMin > 0.0) {
@@ -6023,17 +6023,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[4]) == bounds[4]) {
+  } else if (floor(bounds[4]) == bounds[4]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[15] - bounds[4]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[15] - bounds[4]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[15] - bounds[4]);
+    idx = (int)floor(bounds[15] - bounds[4]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[4] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[15] - bounds[4]) + 0.5);
+    xMin = floor((bounds[15] - bounds[4]) + 0.5);
     xMax = bounds[4] + xMin;
     yMin = xMax - bounds[15];
     yMax = bounds[4];
@@ -6042,7 +6042,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[15];
     } else if (yMin > 0.0) {
@@ -6099,17 +6099,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[26]) == bounds[26]) {
+  } else if (floor(bounds[26]) == bounds[26]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[37] - bounds[26]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[37] - bounds[26]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[37] - bounds[26]);
+    idx = (int)floor(bounds[37] - bounds[26]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[26] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[37] - bounds[26]) + 0.5);
+    xMin = floor((bounds[37] - bounds[26]) + 0.5);
     xMax = bounds[26] + xMin;
     yMin = xMax - bounds[37];
     yMax = bounds[26];
@@ -6118,7 +6118,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[37];
     } else if (yMin > 0.0) {
@@ -6217,17 +6217,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[5]) == bounds[5]) {
+  } else if (floor(bounds[5]) == bounds[5]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[16] - bounds[5]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[16] - bounds[5]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[16] - bounds[5]);
+    idx = (int)floor(bounds[16] - bounds[5]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[5] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[16] - bounds[5]) + 0.5);
+    xMin = floor((bounds[16] - bounds[5]) + 0.5);
     xMax = bounds[5] + xMin;
     yMin = xMax - bounds[16];
     yMax = bounds[5];
@@ -6236,7 +6236,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[16];
     } else if (yMin > 0.0) {
@@ -6293,17 +6293,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[27]) == bounds[27]) {
+  } else if (floor(bounds[27]) == bounds[27]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[38] - bounds[27]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[38] - bounds[27]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[38] - bounds[27]);
+    idx = (int)floor(bounds[38] - bounds[27]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[27] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[38] - bounds[27]) + 0.5);
+    xMin = floor((bounds[38] - bounds[27]) + 0.5);
     xMax = bounds[27] + xMin;
     yMin = xMax - bounds[38];
     yMax = bounds[27];
@@ -6312,7 +6312,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[38];
     } else if (yMin > 0.0) {
@@ -6411,17 +6411,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[6]) == bounds[6]) {
+  } else if (floor(bounds[6]) == bounds[6]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[17] - bounds[6]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[17] - bounds[6]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[17] - bounds[6]);
+    idx = (int)floor(bounds[17] - bounds[6]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[6] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[17] - bounds[6]) + 0.5);
+    xMin = floor((bounds[17] - bounds[6]) + 0.5);
     xMax = bounds[6] + xMin;
     yMin = xMax - bounds[17];
     yMax = bounds[6];
@@ -6430,7 +6430,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[17];
     } else if (yMin > 0.0) {
@@ -6487,17 +6487,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[28]) == bounds[28]) {
+  } else if (floor(bounds[28]) == bounds[28]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[39] - bounds[28]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[39] - bounds[28]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[39] - bounds[28]);
+    idx = (int)floor(bounds[39] - bounds[28]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[28] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[39] - bounds[28]) + 0.5);
+    xMin = floor((bounds[39] - bounds[28]) + 0.5);
     xMax = bounds[28] + xMin;
     yMin = xMax - bounds[39];
     yMax = bounds[28];
@@ -6506,7 +6506,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[39];
     } else if (yMin > 0.0) {
@@ -6567,9 +6567,9 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     } else {
       i0 = xIdxs->size[0] * xIdxs->size[1];
       xIdxs->size[0] = 1;
-      xIdxs->size[1] = (int)std::floor(sz[0] - 1.0) + 1;
+      xIdxs->size[1] = (int)floor(sz[0] - 1.0) + 1;
       emxEnsureCapacity_real_T1(xIdxs, i0);
-      idx = (int)std::floor(sz[0] - 1.0);
+      idx = (int)floor(sz[0] - 1.0);
       for (i0 = 0; i0 <= idx; i0++) {
         xIdxs->data[xIdxs->size[0] * i0] = 1.0 + (double)i0;
       }
@@ -6595,9 +6595,9 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     } else {
       i0 = yIdxs->size[0] * yIdxs->size[1];
       yIdxs->size[0] = 1;
-      yIdxs->size[1] = (int)std::floor(sz[1] - 1.0) + 1;
+      yIdxs->size[1] = (int)floor(sz[1] - 1.0) + 1;
       emxEnsureCapacity_real_T1(yIdxs, i0);
-      idx = (int)std::floor(sz[1] - 1.0);
+      idx = (int)floor(sz[1] - 1.0);
       for (i0 = 0; i0 <= idx; i0++) {
         yIdxs->data[yIdxs->size[0] * i0] = 1.0 + (double)i0;
       }
@@ -6663,17 +6663,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[7]) == bounds[7]) {
+  } else if (floor(bounds[7]) == bounds[7]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[18] - bounds[7]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[18] - bounds[7]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[18] - bounds[7]);
+    idx = (int)floor(bounds[18] - bounds[7]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[7] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[18] - bounds[7]) + 0.5);
+    xMin = floor((bounds[18] - bounds[7]) + 0.5);
     xMax = bounds[7] + xMin;
     yMin = xMax - bounds[18];
     yMax = bounds[7];
@@ -6682,7 +6682,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[18];
     } else if (yMin > 0.0) {
@@ -6739,17 +6739,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[29]) == bounds[29]) {
+  } else if (floor(bounds[29]) == bounds[29]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[40] - bounds[29]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[40] - bounds[29]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[40] - bounds[29]);
+    idx = (int)floor(bounds[40] - bounds[29]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[29] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[40] - bounds[29]) + 0.5);
+    xMin = floor((bounds[40] - bounds[29]) + 0.5);
     xMax = bounds[29] + xMin;
     yMin = xMax - bounds[40];
     yMax = bounds[29];
@@ -6758,7 +6758,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[40];
     } else if (yMin > 0.0) {
@@ -6857,17 +6857,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[8]) == bounds[8]) {
+  } else if (floor(bounds[8]) == bounds[8]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[19] - bounds[8]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[19] - bounds[8]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[19] - bounds[8]);
+    idx = (int)floor(bounds[19] - bounds[8]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[8] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[19] - bounds[8]) + 0.5);
+    xMin = floor((bounds[19] - bounds[8]) + 0.5);
     xMax = bounds[8] + xMin;
     yMin = xMax - bounds[19];
     yMax = bounds[8];
@@ -6876,7 +6876,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[19];
     } else if (yMin > 0.0) {
@@ -6933,17 +6933,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[30]) == bounds[30]) {
+  } else if (floor(bounds[30]) == bounds[30]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[41] - bounds[30]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[41] - bounds[30]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[41] - bounds[30]);
+    idx = (int)floor(bounds[41] - bounds[30]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[30] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[41] - bounds[30]) + 0.5);
+    xMin = floor((bounds[41] - bounds[30]) + 0.5);
     xMax = bounds[30] + xMin;
     yMin = xMax - bounds[41];
     yMax = bounds[30];
@@ -6952,7 +6952,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[41];
     } else if (yMin > 0.0) {
@@ -7051,17 +7051,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[9]) == bounds[9]) {
+  } else if (floor(bounds[9]) == bounds[9]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[20] - bounds[9]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[20] - bounds[9]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[20] - bounds[9]);
+    idx = (int)floor(bounds[20] - bounds[9]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[9] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[20] - bounds[9]) + 0.5);
+    xMin = floor((bounds[20] - bounds[9]) + 0.5);
     xMax = bounds[9] + xMin;
     yMin = xMax - bounds[20];
     yMax = bounds[9];
@@ -7070,7 +7070,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[20];
     } else if (yMin > 0.0) {
@@ -7127,17 +7127,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[31]) == bounds[31]) {
+  } else if (floor(bounds[31]) == bounds[31]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[42] - bounds[31]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[42] - bounds[31]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[42] - bounds[31]);
+    idx = (int)floor(bounds[42] - bounds[31]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[31] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[42] - bounds[31]) + 0.5);
+    xMin = floor((bounds[42] - bounds[31]) + 0.5);
     xMax = bounds[31] + xMin;
     yMin = xMax - bounds[42];
     yMax = bounds[31];
@@ -7146,7 +7146,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[42];
     } else if (yMin > 0.0) {
@@ -7247,17 +7247,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     xIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
     xIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[10]) == bounds[10]) {
+  } else if (floor(bounds[10]) == bounds[10]) {
     i0 = xIdxs->size[0] * xIdxs->size[1];
     xIdxs->size[0] = 1;
-    xIdxs->size[1] = (int)std::floor(bounds[21] - bounds[10]) + 1;
+    xIdxs->size[1] = (int)floor(bounds[21] - bounds[10]) + 1;
     emxEnsureCapacity_real_T1(xIdxs, i0);
-    idx = (int)std::floor(bounds[21] - bounds[10]);
+    idx = (int)floor(bounds[21] - bounds[10]);
     for (i0 = 0; i0 <= idx; i0++) {
       xIdxs->data[xIdxs->size[0] * i0] = bounds[10] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[21] - bounds[10]) + 0.5);
+    xMin = floor((bounds[21] - bounds[10]) + 0.5);
     xMax = bounds[10] + xMin;
     yMin = xMax - bounds[21];
     yMax = bounds[10];
@@ -7266,7 +7266,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[21];
     } else if (yMin > 0.0) {
@@ -7323,17 +7323,17 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
     yIdxs->size[1] = 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
     yIdxs->data[0] = rtNaN;
-  } else if (std::floor(bounds[32]) == bounds[32]) {
+  } else if (floor(bounds[32]) == bounds[32]) {
     i0 = yIdxs->size[0] * yIdxs->size[1];
     yIdxs->size[0] = 1;
-    yIdxs->size[1] = (int)std::floor(bounds[43] - bounds[32]) + 1;
+    yIdxs->size[1] = (int)floor(bounds[43] - bounds[32]) + 1;
     emxEnsureCapacity_real_T1(yIdxs, i0);
-    idx = (int)std::floor(bounds[43] - bounds[32]);
+    idx = (int)floor(bounds[43] - bounds[32]);
     for (i0 = 0; i0 <= idx; i0++) {
       yIdxs->data[yIdxs->size[0] * i0] = bounds[32] + (double)i0;
     }
   } else {
-    xMin = std::floor((bounds[43] - bounds[32]) + 0.5);
+    xMin = floor((bounds[43] - bounds[32]) + 0.5);
     xMax = bounds[32] + xMin;
     yMin = xMax - bounds[43];
     yMax = bounds[32];
@@ -7342,7 +7342,7 @@ void createImage(const cell_0 *C, const double P[3], const double q[4], const
       u1 = yMax;
     }
 
-    if (std::abs(yMin) < 4.4408920985006262E-16 * u1) {
+    if (fabs(yMin) < 4.4408920985006262E-16 * u1) {
       xMin++;
       xMax = bounds[43];
     } else if (yMin > 0.0) {

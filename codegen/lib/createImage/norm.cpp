@@ -10,7 +10,7 @@
  */
 
 /* Include files */
-#include <cmath>
+#include <math.h>
 #include "rt_nonfinite.h"
 #include "createImage.h"
 #include "norm.h"
@@ -26,7 +26,7 @@ double norm(const double x[6])
   y = 0.0;
   scale = 3.3121686421112381E-170;
   for (k = 0; k < 6; k++) {
-    absxk = std::abs(x[k]);
+    absxk = fabs(x[k]);
     if (absxk > scale) {
       t = scale / absxk;
       y = 1.0 + y * t * t;
@@ -37,7 +37,7 @@ double norm(const double x[6])
     }
   }
 
-  return scale * std::sqrt(y);
+  return scale * sqrt(y);
 }
 
 /* End of code generation (norm.cpp) */
