@@ -28,7 +28,7 @@ useMexForImgGen = false;
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
 targIdx = 2501;
-runTargOnly = true;
+runTargOnly = false;
 
 
 %% Main
@@ -195,7 +195,7 @@ for ii = 1:N
 end
 
 %create all the images
-imgDArray = zeros(sz(2),sz(1),N);
+imgDArray = zeros(sz(2),sz(1));
 tic
 
 %control which images are created
@@ -223,7 +223,9 @@ for ii = idxs
     imgLidar = createLidarImage(imgD, lidarPixelMatches);
     
     %save Depth
-    imgDArray(:,:,ii) = imgD;
+    if(ii == targIdx)
+        imgDArray(:,:,ii) = imgD;
+    end
     
     %filter and display
     imgFilt = imgaussfilt(img,1);
