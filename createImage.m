@@ -83,7 +83,7 @@ for kk = 1:Ncubes
             
             %assign distance
             rBar = D*vCam;
-            Pix(4) = rBar(3);
+            Pix(4) = norm(rBar(3));
             
             if(inter == 0) 
                 %we hit nothing
