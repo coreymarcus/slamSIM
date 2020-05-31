@@ -28,7 +28,7 @@ useMexForImgGen = true;
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
 targIdx = 2501;
-runTargOnly = false;
+runTargOnly = true;
 
 
 %% Main
@@ -218,7 +218,7 @@ else
     idxs = 1:N;
 end
 
-parfor ii = idxs
+for ii = idxs
 
     
 %     tic
