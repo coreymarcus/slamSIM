@@ -7,7 +7,7 @@ clc
 
 %% Options
 
-% LIDAR
+% LIDAR %
 LidarFOVHeight = pi/6; %radians
 LidarFOVWidth = pi/4; %radians
 LidarArrayWidth = 50;
