@@ -27,7 +27,7 @@ useMexForImgGen = true;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
-targIdx = [2583]; %set of frames we'd like to run
+targIdx = [2571]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
 runTargOnly = true;
 
