@@ -27,9 +27,12 @@ useMexForImgGen = true;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
-targIdx = [2571]; %set of frames we'd like to run (1-idx, not 0-idx)
+targIdx = [2640]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
 runTargOnly = true;
+
+%savepath for data
+savepath = 'C:\Users\corey\Documents\SharedFolder\';
 
 
 %% Main
@@ -276,4 +279,5 @@ truth.quat = qArray;
 truth.depth = imgDArray;
 truth.K = K;
 truth.lidarPixelMatches = lidarPixelMatches;
-save('slamSIM_truth.mat','truth','-v7.3');
+save(strcat('C:\Users\corey\Documents\SharedFolder\','slamSIM_truth.mat'),...
+    'truth','-v7.3');
