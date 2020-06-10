@@ -274,4 +274,6 @@ truth.CArray = CArray;
 truth.traj = x;
 truth.quat = qArray;
 truth.depth = imgDArray;
+truth.K = K;
+truth.lidarPixelMatches = lidarPixelMatches;
 save('slamSIM_truth.mat','truth','-v7.3');
