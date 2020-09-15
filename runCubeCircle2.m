@@ -288,7 +288,7 @@ else
     csvwrite(strcat(savepath,'\truthQuat.csv'), qArray);
     csvwrite(strcat(savepath,'\truthK.csv'), K);
     csvwrite(strcat(savepath,'\truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,1));
-    csvwrite(strcat(savepath,'\truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,2));
+    csvwrite(strcat(savepath,'\truthLidarPixelMatchesY.csv'), lidarPixelMatches(:,:,2));
     
     %SAVING TRUTH DEPTH IN ZERO INDEX FILE NAME
     for ii = idxs
