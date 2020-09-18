@@ -166,6 +166,8 @@ for ii = 1:LidarArrayWidth
         p = zeros(2,1);
         p(1) = round(pbar(1)/pbar(3));
         p(2) = round(pbar(2)/pbar(3));
+        %p(1) = pbar(1)/pbar(3);
+        %p(2) = pbar(2)/pbar(3);
         
         lidarPixelMatches(jj,ii,:) = p;
         
