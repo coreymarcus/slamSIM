@@ -29,13 +29,21 @@ useMexForImgGen = true;
 %it at the target index
 targIdx = [2500:2700]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
-runTargOnly = true;
+runTargOnly = false;
 
 %savepath for data
 savepath = 'C:\Users\corey\Documents\SharedFolder\truth';
 
 %save truth information as csv?
 saveAsCsv = true;
+
+% Noise
+addNoise = true;
+MuLidar = 0; %average lidar depth noise
+PLidar = .025^2; % lidar depth covariance, m^2
+MuRGB = 0; % average RGB noise
+PRGB = .025; % RGB noise covariance
+
 
 
 %% Main
@@ -224,10 +232,10 @@ else
 end
 
 %create all the images
-imgDArray = zeros(sz(2),sz(1),length(idxs));
+% imgDArray = zeros(sz(2),sz(1),length(idxs));
 tic
 
-for ii = idxs
+parfor ii = idxs
 %     tic
     if(useMexForImgGen)
         imgRGBD = createImage_mex(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
@@ -242,15 +250,47 @@ for ii = idxs
     imgD = imgRGBD(:,:,4);
     imgLidar = createLidarImage(imgD, lidarPixelMatches);
     
+    if(addNoise)
+        %add noise to img
+        for jj = 1:sz(1)
+            for kk = 1:sz(2)
+                
+                %RBG Noise
+                RGBnoise = mvnrnd(MuRGB*ones(3,1), PRGB*eye(3));
+                newPixel = squeeze(img(kk,jj,:)) + RGBnoise';
+                
+                %constrain RBG values
+                newPixel(newPixel > 1) = 1;
+                newPixel(newPixel < 0) = 0;
+                
+                %reassign
+                img(kk,jj,:) = newPixel;
+                
+            end
+        end
+        
+        %add noise to imgLidar
+        for jj = 1:LidarArrayWidth
+            for kk = 1:LidarArrayHeight
+                
+                %depth noise
+                Dnoise = mvnrnd(MuLidar, PLidar);
+                imgLidar(kk,jj) = imgLidar(kk,jj) + Dnoise;
+                
+            end
+        end
+        
+    end
+    
     %save Depth
 %     if(ii == targKF)
-        imgDArray(:,:,ii == idxs) = imgD;
+%         imgDArray(:,:,ii == idxs) = imgD;
 %     end
     
     %filter and display
     imgFilt = imgaussfilt(img,1);
-    %     imgFilt = img;
-    %     imshow(img);
+%     imgFilt = img;
+%     imshow(img);
     
     figure(imgFig);
     imshow(imgFilt);
@@ -270,7 +310,7 @@ for ii = idxs
         'precision','%.4f')
     
     disp('Percent Complete:')
-    disp((max(idxs) - ii)/length(idxs)*100)
+    disp(ii/length(idxs)*100)
     
 end
 toc
@@ -280,7 +320,7 @@ if(~saveAsCsv)
     truth.CArray = CArray;
     truth.traj = x;
     truth.quat = qArray;
-    truth.depth = imgDArray;
+%     truth.depth = imgDArray;
     truth.K = K;
     truth.lidarPixelMatches = lidarPixelMatches;
     save(strcat(savepath,'slamSIM_truth.mat'),...
@@ -292,11 +332,11 @@ else
     csvwrite(strcat(savepath,'\truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,1));
     csvwrite(strcat(savepath,'\truthLidarPixelMatchesY.csv'), lidarPixelMatches(:,:,2));
     
-    %SAVING TRUTH DEPTH IN ZERO INDEX FILE NAME
-    for ii = idxs
-        fname = strcat(savepath,'\truthDepth',string(ii-1),'.csv');
-        csvwrite(fname, imgDArray(:,:,ii == idxs));
-        
-    end
+%     %SAVING TRUTH DEPTH IN ZERO INDEX FILE NAME
+%     for ii = idxs
+%         fname = strcat(savepath,'\truthDepth',string(ii-1),'.csv');
+%         csvwrite(fname, imgDArray(:,:,ii == idxs));
+%         
+%     end
 end
     
