@@ -27,7 +27,7 @@ useMexForImgGen = true;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
-targIdx = [2500:2700]; %set of frames we'd like to run (1-idx, not 0-idx)
+targIdx = [1:100]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
 runTargOnly = false;
 
@@ -40,9 +40,9 @@ saveAsCsv = true;
 % Noise
 addNoise = true;
 MuLidar = 0; %average lidar depth noise
-PLidar = .025^2; % lidar depth covariance, m^2
+PLidar = .01^2; % lidar depth covariance, m^2
 MuRGB = 0; % average RGB noise
-PRGB = .025; % RGB noise covariance
+PRGB = .01; % RGB noise covariance
 
 
 
@@ -250,14 +250,23 @@ parfor ii = idxs
     imgD = imgRGBD(:,:,4);
     imgLidar = createLidarImage(imgD, lidarPixelMatches);
     
+
+    
+    %create some noise
+    RGBnoise = mvnrnd(MuRGB*ones(sz(1)*sz(2),3), PRGB*eye(3));
+    Dnoise = mvnrnd(MuLidar*ones(LidarArrayWidth*LidarArrayHeight,1), PLidar);
+
+    
     if(addNoise)
         %add noise to img
         for jj = 1:sz(1)
             for kk = 1:sz(2)
                 
-                %RBG Noise
-                RGBnoise = mvnrnd(MuRGB*ones(3,1), PRGB*eye(3));
-                newPixel = squeeze(img(kk,jj,:)) + RGBnoise';
+                % linear index
+                idx = jj + (kk-1)*sz(1);
+                
+                %add RBG Noise
+                newPixel = squeeze(img(kk,jj,:)) + RGBnoise(idx,:)';
                 
                 %constrain RBG values
                 newPixel(newPixel > 1) = 1;
@@ -273,14 +282,17 @@ parfor ii = idxs
         for jj = 1:LidarArrayWidth
             for kk = 1:LidarArrayHeight
                 
+                %linear index
+                idx = jj + (kk-1)*LidarArrayWidth;
+                
                 %depth noise
-                Dnoise = mvnrnd(MuLidar, PLidar);
-                imgLidar(kk,jj) = imgLidar(kk,jj) + Dnoise;
+                imgLidar(kk,jj) = imgLidar(kk,jj) + Dnoise(idx);
                 
             end
         end
         
     end
+    
     
     %save Depth
 %     if(ii == targKF)
