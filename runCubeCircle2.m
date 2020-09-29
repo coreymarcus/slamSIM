@@ -48,8 +48,8 @@ PRGB = .01; % RGB noise covariance
 GaussBlurFactor = 3;
 
 % Parallel Pool
-s = matlabpool('size');
-if(isempty(s))
+p = gcp('nocreate')
+if(isempty(p))
     parpool(8)
 end
 
