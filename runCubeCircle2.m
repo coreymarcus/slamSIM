@@ -23,7 +23,7 @@ Noscil = 70; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
 %control if we used compiled code for image generation
-useMexForImgGen = true;
+useMexForImgGen = false;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
@@ -32,17 +32,23 @@ targKF = targIdx(1); %the frame where dense depth data for each image pixel will
 runTargOnly = false;
 
 %savepath for data
-savepath = 'C:\Users\corey\Documents\SharedFolder\truth';
+% savepath = 'C:\Users\corey\Documents\SharedFolder\truth';
+savepath = 'truth';
 
 %save truth information as csv?
 saveAsCsv = true;
 
 % Noise
-addNoise = true;
+addRBGNoise = false;
+addDepthNoise = true;
 MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
 MuRGB = 0; % average RGB noise
 PRGB = .01; % RGB noise covariance
+GaussBlurFactor = 3;
+
+% Parallel Pool
+parpool(8)
 
 
 
@@ -257,7 +263,7 @@ parfor ii = idxs
     Dnoise = mvnrnd(MuLidar*ones(LidarArrayWidth*LidarArrayHeight,1), PLidar);
 
     
-    if(addNoise)
+    if(addRBGNoise)
         %add noise to img
         for jj = 1:sz(1)
             for kk = 1:sz(2)
@@ -277,6 +283,9 @@ parfor ii = idxs
                 
             end
         end
+    end
+
+    if(addDepthNoise)
         
         %add noise to imgLidar
         for jj = 1:LidarArrayWidth
@@ -292,30 +301,31 @@ parfor ii = idxs
         end
         
     end
-    
+
+    %apply gaussian blur to image
+    imgFilt = imgaussfilt(img,GaussBlurFactor);
     
     %save Depth
 %     if(ii == targKF)
 %         imgDArray(:,:,ii == idxs) = imgD;
 %     end
     
-    %filter and display
-    imgFilt = imgaussfilt(img,1);
-%     imgFilt = img;
-%     imshow(img);
+    %display images
+    % imgFilt = img;
+    % imshow(img);
     
-    figure(imgFig);
-    imshow(imgFilt);
+    % figure(imgFig);
+    % imshow(imgFilt);
     
-    figure(imgDFig)
-    s = surf(imgD);
-    s.EdgeColor = 'interp';
-    view([0 0 -1])
+    % figure(imgDFig)
+    % s = surf(imgD);
+    % s.EdgeColor = 'interp';
+    % view([0 0 -1])
     
-    figure(lidarFig)
-    s = surf(imgLidar);
-    s.EdgeColor = 'interp';
-    view([0 0 -1])
+    % figure(lidarFig)
+    % s = surf(imgLidar);
+    % s.EdgeColor = 'interp';
+    % view([0 0 -1])
     
     imwrite(imgFilt,strcat('images/cubeCircling',num2str(ii,'%04i'),'.jpg'))
     dlmwrite(strcat('lidarImages/cubeCircling',num2str(ii,'%04i'),'.csv'),imgLidar,...
