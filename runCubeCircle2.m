@@ -51,7 +51,7 @@ GaussBlurFactor = 3;
 pool = gcp('nocreate')
 if(isempty(pool))
     pool = parpool(6)
-    addAttachedFiles(pool, 'createImage_mex')
+    addAttachedFiles(pool, 'createImage_mex.mexw64')
 end
 
 
