@@ -48,7 +48,7 @@ PRGB = .01; % RGB noise covariance
 GaussBlurFactor = 3;
 
 % Parallel Pool
-poolnum = 6; %number of cores used
+poolnum = 8; %number of cores used
 
 %% Main
 
