@@ -247,7 +247,7 @@ else
 end
 
 %create all the images
-% imgDArray = zeros(sz(2),sz(1),length(idxs));
+imgDArray = zeros(sz(2),sz(1),length(idxs));
 
 % Parallel Pool
 p = gcp('nocreate');
@@ -323,7 +323,7 @@ parfor ii = idxs
     
     %save Depth
 %     if(ii == targKF)
-%         imgDArray(:,:,ii == idxs) = imgD;
+    imgDArray(:,:,ii) = imgD;
 %     end
     
     %display images
