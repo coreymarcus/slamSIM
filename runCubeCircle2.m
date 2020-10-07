@@ -23,13 +23,13 @@ Noscil = 70; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
 %control if we used compiled code for image generation
-useMexForImgGen = true;
+useMexForImgGen = false;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
 targIdx = [1:100]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
-runTargOnly = false;
+runTargOnly = true;
 
 %savepath for data
 % savepath = 'C:\Users\corey\Documents\SharedFolder\truth';
@@ -40,7 +40,7 @@ saveAsCsv = true;
 
 % Noise
 addRBGNoise = false;
-addDepthNoise = true;
+addDepthNoise = false;
 MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
 MuRGB = 0; % average RGB noise
@@ -48,11 +48,11 @@ PRGB = .01; % RGB noise covariance
 GaussBlurFactor = 3;
 
 % Parallel Pool
-pool = gcp('nocreate')
-if(isempty(pool))
-    pool = parpool(6)
-    addAttachedFiles(pool, 'createImage_mex.mexw64')
-end
+% pool = gcp('nocreate')
+% if(isempty(pool))
+%     pool = parpool(6)
+%     addAttachedFiles(pool, 'createImage_mex.mexw64')
+% end
 
 
 
@@ -242,7 +242,7 @@ else
 end
 
 %create all the images
-% imgDArray = zeros(sz(2),sz(1),length(idxs));
+imgDArray = zeros(sz(2),sz(1),length(idxs));
 tic
 
 parfor ii = idxs
@@ -311,7 +311,8 @@ parfor ii = idxs
     
     %save Depth
 %     if(ii == targKF)
-%         imgDArray(:,:,ii == idxs) = imgD;
+
+    imgDArray(:,:,ii) = imgD;
 %     end
     
     %display images
@@ -352,17 +353,17 @@ if(~saveAsCsv)
     save(strcat(savepath,'slamSIM_truth.mat'),...
         'truth','-v7.3');
 else
-    csvwrite(strcat(savepath,'\truthTraj.csv'), x');
-    csvwrite(strcat(savepath,'\truthQuat.csv'), qArray);
-    csvwrite(strcat(savepath,'\truthK.csv'), K);
-    csvwrite(strcat(savepath,'\truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,1));
-    csvwrite(strcat(savepath,'\truthLidarPixelMatchesY.csv'), lidarPixelMatches(:,:,2));
+    csvwrite(strcat(savepath,'/truthTraj.csv'), x');
+    csvwrite(strcat(savepath,'/truthQuat.csv'), qArray);
+    csvwrite(strcat(savepath,'/truthK.csv'), K);
+    csvwrite(strcat(savepath,'/truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,1));
+    csvwrite(strcat(savepath,'/truthLidarPixelMatchesY.csv'), lidarPixelMatches(:,:,2));
     
-%     %SAVING TRUTH DEPTH IN ZERO INDEX FILE NAME
-%     for ii = idxs
-%         fname = strcat(savepath,'\truthDepth',string(ii-1),'.csv');
-%         csvwrite(fname, imgDArray(:,:,ii == idxs));
-%         
-%     end
+    %SAVING TRUTH DEPTH IN ZERO INDEX FILE NAME
+    for ii = idxs
+        fname = strcat(savepath,'/truthDepth',string(ii-1),'.csv');
+        csvwrite(fname, imgDArray(:,:,ii == idxs));
+        
+    end
 end
     
