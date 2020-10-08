@@ -23,7 +23,7 @@ Noscil = 70; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
 %control if we used compiled code for image generation
-useMexForImgGen = true;
+useMexForImgGen = false;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
@@ -48,11 +48,11 @@ PRGB = .01; % RGB noise covariance
 GaussBlurFactor = 3;
 
 % Parallel Pool
-pool = gcp('nocreate')
-if(isempty(pool))
-    pool = parpool(6)
-    addAttachedFiles(pool, 'createImage_mex.mexw64')
-end
+% pool = gcp('nocreate')
+% if(isempty(pool))
+%     pool = parpool(6)
+%     addAttachedFiles(pool, 'createImage_mex.mexw64')
+% end
 
 
 
@@ -245,7 +245,7 @@ end
 % imgDArray = zeros(sz(2),sz(1),length(idxs));
 tic
 
-parfor ii = idxs
+for ii = idxs
 %     tic
     if(useMexForImgGen)
         imgRGBD = createImage_mex(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
@@ -326,10 +326,10 @@ parfor ii = idxs
     % s.EdgeColor = 'interp';
     % view([0 0 -1])
     
-    % figure(lidarFig)
-    % s = surf(imgLidar);
-    % s.EdgeColor = 'interp';
-    % view([0 0 -1])
+    figure(lidarFig)
+    s = surf(imgLidar);
+    s.EdgeColor = 'interp';
+    view([0 0 -1])
     
     imwrite(imgFilt,strcat('images/cubeCircling',num2str(ii,'%04i'),'.jpg'))
     dlmwrite(strcat('lidarImages/cubeCircling',num2str(ii,'%04i'),'.csv'),imgLidar,...
