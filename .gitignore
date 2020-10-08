@@ -8,3 +8,6 @@
 *.csv
 *.mat
 *.csv
+*.prj
+codegen/*
+*.mexa64

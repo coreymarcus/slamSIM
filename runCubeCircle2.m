@@ -2,10 +2,13 @@
 
 clear
 close all
-clc
+% clc
 
 
 %% Options
+
+%make sure we get a different seed every time
+rng('shuffle');
 
 % LIDAR
 LidarFOVHeight = pi/6; %radians
@@ -27,13 +30,13 @@ useMexForImgGen = false;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
-targIdx = [1:100]; %set of frames we'd like to run (1-idx, not 0-idx)
+targIdx = [1:175]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
-runTargOnly = false;
+runTargOnly = true;
 
 %savepath for data
 % savepath = 'C:\Users\corey\Documents\SharedFolder\truth';
-savepath = 'truth';
+savepath = 'data/';
 
 %save truth information as csv?
 saveAsCsv = true;
@@ -41,11 +44,16 @@ saveAsCsv = true;
 % Noise
 addRBGNoise = false;
 addDepthNoise = true;
+addTrajNoise = true;
 MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
 MuRGB = 0; % average RGB noise
 PRGB = .01; % RGB noise covariance
 GaussBlurFactor = 3;
+MuPos = zeros(3,1); % average position noise
+PPos = .001*eye(3); % position noise covariance
+MuEul = zeros(3,1); % Average euler angle noise
+PEul = .0001*eye(3);
 
 % Parallel Pool
 % pool = gcp('nocreate')
@@ -71,9 +79,14 @@ for ii = 1:N
     %     x(3,ii) = inc;
 end
 
-figure
-scatter3(x(1,:),x(2,:),x(3,:))
-axis equal
+if(addTrajNoise)
+    posnoise = mvnrnd(MuPos',PPos,N);
+    x = x + posnoise';
+end
+
+% figure
+% scatter3(x(1,:),x(2,:),x(3,:))
+% axis equal
 
 % Create the cube
 P = [1; 0; 0];
@@ -193,14 +206,14 @@ for ii = 1:LidarArrayWidth
 end
 
 %putput pixels to make sure everything is correct
-figure
-hold on
-scatter(lidarPixelMatches(1,1,1),lidarPixelMatches(1,1,2))
-scatter(lidarPixelMatches(1,end,1),lidarPixelMatches(1,end,2))
-scatter(lidarPixelMatches(end,end,1),lidarPixelMatches(end,end,2))
-scatter(lidarPixelMatches(end,1,1),lidarPixelMatches(end,1,2))
-legend('UL','UR','LR','LL','Location','best')
-set(gca, 'YDir','reverse')
+% figure
+% hold on
+% scatter(lidarPixelMatches(1,1,1),lidarPixelMatches(1,1,2))
+% scatter(lidarPixelMatches(1,end,1),lidarPixelMatches(1,end,2))
+% scatter(lidarPixelMatches(end,end,1),lidarPixelMatches(end,end,2))
+% scatter(lidarPixelMatches(end,1,1),lidarPixelMatches(end,1,2))
+% legend('UL','UR','LR','LL','Location','best')
+% set(gca, 'YDir','reverse')
 
 %run through and create an image at each point, always pointing towards the
 %center
@@ -209,15 +222,16 @@ vx = [1; 0; 0];
 vBMat = [vx'; vz'];
 aVec = [1; 1];
 
-imgFig = figure;
-imgDFig = figure;
-lidarFig = figure;
+% imgFig = figure;
+% imgDFig = figure;
+% lidarFig = figure;
 
 %generate quaternions
 qArray = zeros(N,4);
+    
 for ii = 1:N
     
-        %create the quaternion for this location
+    %create the quaternion for this location
     imFoc = [0 0 0]'; %point the image is centered on
     vz_I = imFoc - x(:,ii); %camera z-axis in the inertial frame
     vx_I = [vz_I(2); -vz_I(1); 0]; %camera x-axis in the inertial frame
@@ -234,6 +248,13 @@ for ii = 1:N
     
 end
 
+%generate attitude noise if needed
+if(addTrajNoise)
+    anglenoise = mvnrnd(MuEul,PEul,N);
+    quatnoise = angle2quat(anglenoise(:,1),anglenoise(:,2),anglenoise(:,3));
+    qArray = quatmultiply(qArray,quatnoise);
+end
+
 %control which images are created
 if(runTargOnly)
     idxs = targIdx;
@@ -242,7 +263,7 @@ else
 end
 
 %create all the images
-% imgDArray = zeros(sz(2),sz(1),length(idxs));
+imgDArray = zeros(sz(2),sz(1),length(idxs));
 tic
 
 for ii = idxs
@@ -311,7 +332,8 @@ for ii = idxs
     
     %save Depth
 %     if(ii == targKF)
-%         imgDArray(:,:,ii == idxs) = imgD;
+
+    imgDArray(:,:,ii) = imgD;
 %     end
     
     %display images
@@ -331,8 +353,8 @@ for ii = idxs
     s.EdgeColor = 'interp';
     view([0 0 -1])
     
-    imwrite(imgFilt,strcat('images/cubeCircling',num2str(ii,'%04i'),'.jpg'))
-    dlmwrite(strcat('lidarImages/cubeCircling',num2str(ii,'%04i'),'.csv'),imgLidar,...
+    imwrite(imgFilt,strcat(savepath,'images/cubeCircling',num2str(ii-1,'%04i'),'.jpg'))
+    dlmwrite(strcat(savepath,'lidarImages/cubeCircling',num2str(ii-1,'%04i'),'.csv'),imgLidar,...
         'precision','%.4f')
     
     disp('Percent Complete:')
@@ -349,20 +371,20 @@ if(~saveAsCsv)
 %     truth.depth = imgDArray;
     truth.K = K;
     truth.lidarPixelMatches = lidarPixelMatches;
-    save(strcat(savepath,'slamSIM_truth.mat'),...
+    save(strcat(savepath,'truth/slamSIM_truth.mat'),...
         'truth','-v7.3');
 else
-    csvwrite(strcat(savepath,'\truthTraj.csv'), x');
-    csvwrite(strcat(savepath,'\truthQuat.csv'), qArray);
-    csvwrite(strcat(savepath,'\truthK.csv'), K);
-    csvwrite(strcat(savepath,'\truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,1));
-    csvwrite(strcat(savepath,'\truthLidarPixelMatchesY.csv'), lidarPixelMatches(:,:,2));
+    csvwrite(strcat(savepath,'truth/truthTraj.csv'), x');
+    csvwrite(strcat(savepath,'truth/truthQuat.csv'), qArray);
+    csvwrite(strcat(savepath,'truth/truthK.csv'), K);
+    csvwrite(strcat(savepath,'truth/truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,1));
+    csvwrite(strcat(savepath,'truth/truthLidarPixelMatchesY.csv'), lidarPixelMatches(:,:,2));
     
-%     %SAVING TRUTH DEPTH IN ZERO INDEX FILE NAME
-%     for ii = idxs
-%         fname = strcat(savepath,'\truthDepth',string(ii-1),'.csv');
-%         csvwrite(fname, imgDArray(:,:,ii == idxs));
-%         
-%     end
+    %SAVING TRUTH DEPTH IN ZERO INDEX FILE NAME
+    for ii = idxs
+        fname = strcat(savepath,'truth/truthDepth',string(ii-1),'.csv');
+        csvwrite(fname, imgDArray(:,:,ii == idxs));
+        
+    end
 end
     
