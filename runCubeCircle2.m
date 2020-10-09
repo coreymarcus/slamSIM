@@ -26,11 +26,11 @@ Noscil = 70; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
 %control if we used compiled code for image generation
-useMexForImgGen = false;
+useMexForImgGen = true;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
-targIdx = [1:10]; %set of frames we'd like to run (1-idx, not 0-idx)
+targIdx = [1:2700]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
 runTargOnly = true;
 
@@ -266,7 +266,7 @@ end
 imgDArray = zeros(sz(2),sz(1),length(idxs));
 tic
 
-for ii = idxs
+parfor ii = idxs
 %     tic
     if(useMexForImgGen)
         imgRGBD = createImage_mex(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
@@ -348,10 +348,10 @@ for ii = idxs
     % s.EdgeColor = 'interp';
     % view([0 0 -1])
     
-    figure(lidarFig)
-    s = surf(imgLidar);
-    s.EdgeColor = 'interp';
-    view([0 0 -1])
+    % figure(lidarFig)
+    % s = surf(imgLidar);
+    % s.EdgeColor = 'interp';
+    % view([0 0 -1])
     
     imwrite(imgFilt,strcat(savepath,'images/cubeCircling',num2str(ii-1,'%04i'),'.jpg'))
     dlmwrite(strcat(savepath,'lidarImages/cubeCircling',num2str(ii-1,'%04i'),'.csv'),imgLidar,...
