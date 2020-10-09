@@ -368,6 +368,7 @@ end
 fprintf(1,'\n');
 toc
 
+fprintf(1,'Writing out data... ');
 %write out truth data
 if(~saveAsCsv)
     truth.CArray = CArray;
@@ -392,4 +393,5 @@ else
         
     end
 end
+fprintf(1,'Done!\n Simulation Complete.\n');
     
