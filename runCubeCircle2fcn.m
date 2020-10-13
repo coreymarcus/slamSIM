@@ -29,6 +29,9 @@ useMexForImgGen = true;
 %it at the target index
 runTargOnly = true;
 
+%target KF, zero index
+targKF = 25;
+
 %savepath for data
 % savepath = 'C:\Users\corey\Documents\SharedFolder\truth';
 savepath = 'data/';
@@ -44,11 +47,11 @@ MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
 MuRGB = 0; % average RGB noise
 PRGB = .01; % RGB noise covariance
-GaussBlurFactor = 3;
+GaussBlurFactor = 1;
 MuPos = zeros(3,1); % average position noise
-PPos = .001*eye(3); % position noise covariance
+PPos = .00001*eye(3); % position noise covariance
 MuEul = zeros(3,1); % Average euler angle noise
-PEul = .0001*eye(3);
+PEul = .000001*eye(3);
 
 
 %% Main
@@ -331,9 +334,11 @@ for MCidx = 1:N_MC
         dlmwrite(strcat(itersavepath,'lidarImages/cubeCircling',num2str(ii-1,'%04i'),'.csv'),imgLidar,...
             'precision','%.4f')
         
-        %write truth
-        fname = strcat(itersavepath,'truth/truthDepth',string(ii-1),'.csv');
-        csvwrite(fname, imgD);
+        %write truth if greater than whatever our target is
+        if((ii-1) >= targKF)
+            fname = strcat(itersavepath,'truth/truthDepth',string(ii-1),'.csv');
+            csvwrite(fname, imgD);
+        end
         
         %display progress
         prog = ii/length(idxs)*100;
