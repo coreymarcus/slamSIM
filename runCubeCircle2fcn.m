@@ -41,10 +41,10 @@ addTrajNoise = true;
 MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
 GaussBlurFactor = 1;
-P_R = .1; %variance in circle radius
-P_inc = .1; %variance in circle height
-P_Noscil = 5; %variance in circle rate of oscilation
-P_revs = .01; %variance in total number of revolutions
+P_R = .01; %variance in circle radius
+P_inc = .01; %variance in circle height
+P_Noscil = .5; %variance in circle rate of oscilation
+P_revs = .001; %variance in total number of revolutions
 
 
 %% Main
