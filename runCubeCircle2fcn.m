@@ -4,8 +4,8 @@ function [] = runCubeCircle2fcn(N_MC,targIdx)
 
 %% Options
 
-%make sure we get a different seed every time
-rng('shuffle');
+%make sure we get the same seed for with and without lidar
+rng(5);
 
 % LIDAR
 LidarFOVHeight = pi/6; %radians
@@ -42,7 +42,7 @@ saveAsCsv = true;
 % Noise
 addRBGNoise = false;
 addDepthNoise = true;
-addTrajNoise = true;
+addTrajNoise = false;
 MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
 MuRGB = 0; % average RGB noise
