@@ -37,7 +37,7 @@ saveAsCsv = true;
 
 % Noise
 addDepthNoise = true;
-addTrajNoise = false;
+addTrajNoise = true;
 MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
 GaussBlurFactor = 1;

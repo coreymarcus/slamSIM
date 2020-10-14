@@ -4,4 +4,4 @@ clear
 
 
 %purely designed as a wrapper to call a sim function for bug testing
-runCubeCircle2fcn(1,1:10)
+runCubeCircle2fcn(3,1:10)
