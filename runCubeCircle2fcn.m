@@ -224,9 +224,6 @@ for MCidx = 1:N_MC
         
     end
     
-    plot3(x(1,:), x(2,:), x(3,:))
-    hold on
-    
     %check to see if the desired directory exists
     itersavepath = strcat(savepath,'run',num2str(MCidx - 1,'%04i'),'/');
     if(~exist(itersavepath,'dir'))
