@@ -1,6 +1,6 @@
 clear
-close all
-clc
+% close all
+% clc
 
 
 %purely designed as a wrapper to call a sim function for bug testing

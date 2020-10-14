@@ -25,10 +25,6 @@ N = round(Revs*Nrev);
 %control if we used compiled code for image generation
 useMexForImgGen = true;
 
-%true depth data is massive, run this if you only want to create and save
-%it at the target index
-runTargOnly = true;
-
 %target KF, zero index
 targKF = 25;
 
@@ -40,40 +36,20 @@ savepath = 'data/';
 saveAsCsv = true;
 
 % Noise
-addRBGNoise = false;
 addDepthNoise = true;
 addTrajNoise = false;
 MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
-MuRGB = 0; % average RGB noise
-PRGB = .01; % RGB noise covariance
 GaussBlurFactor = 1;
-MuPos = zeros(3,1); % average position noise
-PPos = .00001*eye(3); % position noise covariance
-MuEul = zeros(3,1); % Average euler angle noise
-PEul = .000001*eye(3);
+P_R = .1; %variance in circle radius
+P_inc = .1; %variance in circle height
+P_Noscil = 5; %variance in circle rate of oscilation
+P_revs = .01; %variance in total number of revolutions
 
 
 %% Main
 %path for wahba solver
 addpath('../matlabScripts/')
-
-theta = linspace(0,2*pi*Revs,N);
-% phi = (theta/(6*Revs)).*sin(3*theta) + inc*sin(Noscil*theta);
-phi = inc*sin(Noscil*theta);
-x = zeros(3,N);
-for ii = 1:N
-    x(1,ii) = R*cos(theta(ii))*cos(phi(ii));
-    x(2,ii) = R*sin(theta(ii))*cos(phi(ii));
-    x(3,ii) = R*sin(phi(ii));
-    %     x(3,ii) = inc;
-end
-
-
-
-% figure
-% scatter3(x(1,:),x(2,:),x(3,:))
-% axis equal
 
 % Create the cube
 P = [1; 0; 0];
@@ -184,23 +160,11 @@ for ii = 1:LidarArrayWidth
         p = zeros(2,1);
         p(1) = round(pbar(1)/pbar(3));
         p(2) = round(pbar(2)/pbar(3));
-        %p(1) = pbar(1)/pbar(3);
-        %p(2) = pbar(2)/pbar(3);
         
         lidarPixelMatches(jj,ii,:) = p;
         
     end
 end
-
-%putput pixels to make sure everything is correct
-% figure
-% hold on
-% scatter(lidarPixelMatches(1,1,1),lidarPixelMatches(1,1,2))
-% scatter(lidarPixelMatches(1,end,1),lidarPixelMatches(1,end,2))
-% scatter(lidarPixelMatches(end,end,1),lidarPixelMatches(end,end,2))
-% scatter(lidarPixelMatches(end,1,1),lidarPixelMatches(end,1,2))
-% legend('UL','UR','LR','LL','Location','best')
-% set(gca, 'YDir','reverse')
 
 %run through and create an image at each point, always pointing towards the
 %center
@@ -209,55 +173,63 @@ vx = [1; 0; 0];
 vBMat = [vx'; vz'];
 aVec = [1; 1];
 
-% imgFig = figure;
-% imgDFig = figure;
-% lidarFig = figure;
-
-%generate quaternions
-qArray = zeros(N,4);
-
-for ii = 1:N
-    
-    %create the quaternion for this location
-    imFoc = [0 0 0]'; %point the image is centered on
-    vz_I = imFoc - x(:,ii); %camera z-axis in the inertial frame
-    vx_I = [vz_I(2); -vz_I(1); 0]; %camera x-axis in the inertial frame
-    
-    %normalize vectors
-    vx_I = vx_I/norm(vx_I);
-    vz_I = vz_I/norm(vz_I);
-    
-    %create matrix and solve wahbas problem
-    vIMat = [vx_I'; vz_I'];
-    RBI = wahbaSolver(aVec,vIMat,vBMat);
-    q = dcm2quat(RBI);
-    qArray(ii,:) = q;
-    
-end
-
 %loop through all MC
 for MCidx = 1:N_MC
     
+    %create iteration specific variables for the trajectory parameters,
+    %these may be corrupted by noise
+    Riter = R;
+    inciter = inc;
+    Nosciliter = Noscil;
+    Revsiter = Revs;
+    
     %generate attitude and position noise if needed
     if(addTrajNoise)
-        anglenoise = mvnrnd(MuEul,PEul,N);
-        quatnoise = angle2quat(anglenoise(:,1),anglenoise(:,2),anglenoise(:,3));
-        qArray = quatmultiply(qArray,quatnoise);
-        
-        posnoise = mvnrnd(MuPos',PPos,N);
-        x = x + posnoise';
+        Riter = Riter + mvnrnd(0,P_R);
+        inciter = inciter + mvnrnd(0,P_inc);
+        Nosciliter = Nosciliter + mvnrnd(0,P_Noscil);
+        Revsiter = Revsiter + mvnrnd(0,P_revs);
     end
     
-    %control which images are created
-    if(runTargOnly)
-        idxs = targIdx;
-    else
-        idxs = 1:N;
+    %Create the positioning for this system
+    theta = linspace(0,2*pi*Revsiter,N);
+    phi = inciter*sin(Nosciliter*theta);
+    x = zeros(3,N);
+    for ii = 1:N
+        x(1,ii) = Riter*cos(theta(ii))*cos(phi(ii));
+        x(2,ii) = Riter*sin(theta(ii))*cos(phi(ii));
+        x(3,ii) = Riter*sin(phi(ii));
     end
+    
+    %generate quaternions
+    qArray = zeros(N,4);
+    
+    % Create the attitude for the system
+    for ii = 1:N
+        
+        %create the quaternion for this location
+        imFoc = [0 0 0]'; %point the image is centered on
+        vz_I = imFoc - x(:,ii); %camera z-axis in the inertial frame
+        vx_I = [vz_I(2); -vz_I(1); 0]; %camera x-axis in the inertial frame
+        
+        %normalize vectors
+        vx_I = vx_I/norm(vx_I);
+        vz_I = vz_I/norm(vz_I);
+        
+        %create matrix and solve wahbas problem
+        vIMat = [vx_I'; vz_I'];
+        RBI = wahbaSolver(aVec,vIMat,vBMat);
+        q = dcm2quat(RBI);
+        qArray(ii,:) = q;
+        
+    end
+    
+    plot3(x(1,:), x(2,:), x(3,:))
+    hold on
     
     %check to see if the desired directory exists
     itersavepath = strcat(savepath,'run',num2str(MCidx - 1,'%04i'),'/');
-    if(~exist(itersavepath))
+    if(~exist(itersavepath,'dir'))
         mkdir(itersavepath);
         mkdir(strcat(itersavepath,'images/'));
         mkdir(strcat(itersavepath,'lidarImages/'));
@@ -267,7 +239,7 @@ for MCidx = 1:N_MC
     %display progress
     fprintf(1, 'Progress: %3d%%',0);
     
-    parfor ii = idxs
+    parfor ii = targIdx
         
         %create image
         if(useMexForImgGen)
@@ -276,38 +248,13 @@ for MCidx = 1:N_MC
             imgRGBD = createImage(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
         end
         
-        
         %extract RGB info
         img = imgRGBD(:,:,1:3);
         imgD = imgRGBD(:,:,4);
         imgLidar = createLidarImage(imgD, lidarPixelMatches);
         
-        %create some noise
-        %  RGBnoise = mvnrnd(MuRGB*ones(sz(1)*sz(2),3), PRGB*eye(3));
+        %create some depth noise
         Dnoise = mvnrnd(MuLidar*ones(LidarArrayWidth*LidarArrayHeight,1), PLidar);
-        
-        
-        %         if(addRBGNoise)
-        %             %add noise to img
-        %             for jj = 1:sz(1)
-        %                 for kk = 1:sz(2)
-        %
-        %                     % linear index
-        %                     idx = jj + (kk-1)*sz(1);
-        %
-        %                     %add RBG Noise
-        %                     newPixel = squeeze(img(kk,jj,:)) + RGBnoise(idx,:)';
-        %
-        %                     %constrain RBG values
-        %                     newPixel(newPixel > 1) = 1;
-        %                     newPixel(newPixel < 0) = 0;
-        %
-        %                     %reassign
-        %                     img(kk,jj,:) = newPixel;
-        %
-        %                 end
-        %             end
-        %         end
         
         if(addDepthNoise)
             
@@ -341,7 +288,7 @@ for MCidx = 1:N_MC
         end
         
         %display progress
-        prog = ii/length(idxs)*100;
+        prog = ii/N*100;
         fprintf(1,'\b\b\b\b%3.0f%%',prog);
         
     end
