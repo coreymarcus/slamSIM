@@ -23,7 +23,7 @@ Noscil = 70; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
 %control if we used compiled code for image generation
-useMexForImgGen = true;
+useMexForImgGen = false;
 
 %target KF, zero index
 targKF = 25;
@@ -101,19 +101,32 @@ C10 = createCube(P10, s, sw, fc, ec);
 P11 = [.2; -1; 2];
 C11 = createCube(P11, s, sw, fc, ec);
 
+% %cube cell array
+% CArray = cell(2,1);
+% CArray{1} = C;
+% CArray{2} = C2;
+% CArray{3} = C3;
+% CArray{4} = C4;
+% CArray{5} = C5;
+% CArray{6} = C6;
+% CArray{7} = C7;
+% CArray{8} = C8;
+% CArray{9} = C9;
+% CArray{10} = C10;
+% CArray{11} = C11;
+
 %cube cell array
-CArray = cell(2,1);
+CArray = cell(1);
 CArray{1} = C;
 CArray{2} = C2;
-CArray{3} = C3;
-CArray{4} = C4;
-CArray{5} = C5;
-CArray{6} = C6;
-CArray{7} = C7;
-CArray{8} = C8;
-CArray{9} = C9;
-CArray{10} = C10;
-CArray{11} = C11;
+% CArray{3} = C3;
+% CArray{4} = C4;
+% CArray{5} = C5;
+% CArray{6} = C6;
+% CArray{7} = C8;
+% CArray{8} = C9;
+% CArray{9} = C10;
+% CArray{10} = C11;
 
 % createPixelVectors and camera information
 f = 500;
@@ -236,6 +249,7 @@ for MCidx = 1:N_MC
     %display progress
     fprintf(1, 'Progress: %3d%%',0);
     
+    % for ii = targIdx
     parfor ii = targIdx
         
         %create image
@@ -262,8 +276,10 @@ for MCidx = 1:N_MC
                     %linear index
                     idx = jj + (kk-1)*LidarArrayWidth;
                     
-                    %depth noise
-                    imgLidar(kk,jj) = imgLidar(kk,jj) + Dnoise(idx);
+                    %depth noise, only add if non-zero lidar point
+                    if(imgLidar(kk,jj) ~= 0)
+                        imgLidar(kk,jj) = imgLidar(kk,jj) + Dnoise(idx);
+                    end
                     
                 end
             end
