@@ -101,24 +101,24 @@ C10 = createCube(P10, s, sw, fc, ec);
 P11 = [.2; -1; 2];
 C11 = createCube(P11, s, sw, fc, ec);
 
-% %cube cell array
-% CArray = cell(2,1);
-% CArray{1} = C;
-% CArray{2} = C2;
-% CArray{3} = C3;
-% CArray{4} = C4;
-% CArray{5} = C5;
-% CArray{6} = C6;
-% CArray{7} = C7;
-% CArray{8} = C8;
-% CArray{9} = C9;
-% CArray{10} = C10;
-% CArray{11} = C11;
-
 %cube cell array
 CArray = cell(1);
 CArray{1} = C;
 CArray{2} = C2;
+CArray{3} = C3;
+CArray{4} = C4;
+CArray{5} = C5;
+CArray{6} = C6;
+CArray{7} = C7;
+CArray{8} = C8;
+CArray{9} = C9;
+CArray{10} = C10;
+CArray{11} = C11;
+
+%cube cell array
+% CArray = cell(1);
+% CArray{1} = C;
+% CArray{2} = C2;
 % CArray{3} = C3;
 % CArray{4} = C4;
 % CArray{5} = C5;
@@ -261,7 +261,7 @@ for MCidx = 1:N_MC
         
         %extract RGB info
         img = imgRGBD(:,:,1:3);
-        imgD = imgRGBD(:,:,4);
+        imgD = imgRGBD(:,:,4); % THIS IS RANGE!!!!
         imgLidar = createLidarImage(imgD, lidarPixelMatches);
         
         %create some depth noise
