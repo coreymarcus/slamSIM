@@ -103,17 +103,17 @@ C11 = createCube(P11, s, sw, fc, ec);
 
 %cube cell array
 CArray = cell(1);
-CArray{1} = C;
-CArray{2} = C2;
-CArray{3} = C3;
-CArray{4} = C4;
-CArray{5} = C5;
-CArray{6} = C6;
-CArray{7} = C7;
-CArray{8} = C8;
-CArray{9} = C9;
-CArray{10} = C10;
-CArray{11} = C11;
+CArray{1,1} = C;
+CArray{2,1} = C2;
+CArray{3,1} = C3;
+CArray{4,1} = C4;
+CArray{5,1} = C5;
+CArray{6,1} = C6;
+CArray{7,1} = C7;
+CArray{8,1} = C8;
+CArray{9,1} = C9;
+CArray{10,1} = C10;
+CArray{11,1} = C11;
 
 %cube cell array
 % CArray = cell(1);
