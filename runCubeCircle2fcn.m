@@ -26,7 +26,7 @@ N = round(Revs*Nrev);
 useMexForImgGen = true;
 
 %target KF, zero index
-targKF = 25;
+targKF = 1;
 
 %savepath for data
 % savepath = 'C:\Users\corey\Documents\SharedFolder\truth';
@@ -249,6 +249,9 @@ for MCidx = 1:N_MC
         img = imgRGBD(:,:,1:3);
         imgD = imgRGBD(:,:,4);
         imgLidar = createLidarImage(imgD, lidarPixelMatches);
+
+        %create a depth image
+        truedepth = createTruthDepth(imgD, V);
         
         %create some depth noise
         Dnoise = mvnrnd(MuLidar*ones(LidarArrayWidth*LidarArrayHeight,1), PLidar);
@@ -281,7 +284,7 @@ for MCidx = 1:N_MC
         %write truth if greater than whatever our target is
         if((ii-1) >= targKF)
             fname = strcat(itersavepath,'truth/truthDepth',string(ii-1),'.csv');
-            csvwrite(fname, imgD);
+            csvwrite(fname, truedepth);
         end
         
         %display progress
