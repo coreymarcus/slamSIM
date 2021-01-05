@@ -150,19 +150,19 @@ V = createPixelVectors(K,width,height);
 
 %create pixel assignments for lidar points
 %build lidar angle array
-LidarYawAngles = linspace(LidarFOVWidth/2,-LidarFOVWidth/2,LidarArrayWidth);  %note intentional sign reversal
-LidarPitchAngles = linspace(-LidarFOVHeight/2,LidarFOVHeight/2,LidarArrayHeight);
-lidarPixelMatches = zeros(LidarArrayHeight,LidarArrayWidth,2);
+LidarAzAngles = linspace(-LidarFOVWidth/2,LidarFOVWidth/2,LidarArrayWidth);  
+LidarElAngles = linspace(LidarFOVHeight/2,-LidarFOVHeight/2,LidarArrayHeight); %note intentional sign reversal
+LidarPixelMatches = zeros(LidarArrayHeight,LidarArrayWidth,2);
 
 %create a calibration output
 FID = fopen('lidarCalib.csv','w');
 fprintf(FID,'%3i, %3i, \n', LidarArrayWidth, LidarArrayHeight);
 for ii = 1:LidarArrayWidth
-    fprintf(FID,'%8f, ',LidarYawAngles(ii));
+    fprintf(FID,'%8f, ',LidarAzAngles(ii));
 end
 fprintf(FID,'\n');
 for ii = 1:LidarArrayHeight
-    fprintf(FID,'%8f, ',LidarPitchAngles(ii));
+    fprintf(FID,'%8f, ',LidarElAngles(ii));
 end
 fclose(FID);
 
@@ -170,10 +170,10 @@ for ii = 1:LidarArrayWidth
     for jj = 1:LidarArrayHeight
         %create vector corresponding to these angles
         r = zeros(3,1);
-        r(2) = sin(LidarPitchAngles(jj));
-        r13 = cos(LidarPitchAngles(jj));
-        r(1) = -r13*sin(LidarYawAngles(ii));
-        r(3) = r13*cos(LidarYawAngles(ii));
+        r(2) = -sin(LidarElAngles(jj));
+        r13 = cos(LidarElAngles(jj));
+        r(1) = r13*sin(LidarAzAngles(ii));
+        r(3) = r13*cos(LidarAzAngles(ii));
         
         %map to pixels
         pbar = K*r;
@@ -181,7 +181,7 @@ for ii = 1:LidarArrayWidth
         p(1) = round(pbar(1)/pbar(3));
         p(2) = round(pbar(2)/pbar(3));
         
-        lidarPixelMatches(jj,ii,:) = p;
+        LidarPixelMatches(jj,ii,:) = p;
         
     end
 end
@@ -269,7 +269,7 @@ for MCidx = 1:N_MC
         %extract RGB info
         img = imgRGBD(:,:,1:3);
         imgD = imgRGBD(:,:,4); % THIS IS RANGE!!!!
-        imgLidar = createLidarImage(imgD, lidarPixelMatches);
+        imgLidar = createLidarImage(imgD, LidarPixelMatches);
 
         %create a depth image
         truedepth = createTruthDepth(imgD, V);
@@ -324,15 +324,15 @@ for MCidx = 1:N_MC
         truth.traj = x;
         truth.quat = qArray;
         truth.K = K;
-        truth.lidarPixelMatches = lidarPixelMatches;
+        truth.lidarPixelMatches = LidarPixelMatches;
         save(strcat(itersavepath,'truth/slamSIM_truth.mat'),...
             'truth','-v7.3');
     else
         csvwrite(strcat(itersavepath,'truth/truthTraj.csv'), x');
         csvwrite(strcat(itersavepath,'truth/truthQuat.csv'), qArray);
         csvwrite(strcat(itersavepath,'truth/truthK.csv'), K);
-        csvwrite(strcat(itersavepath,'truth/truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,1));
-        csvwrite(strcat(itersavepath,'truth/truthLidarPixelMatchesY.csv'), lidarPixelMatches(:,:,2));
+        csvwrite(strcat(itersavepath,'truth/truthLidarPixelMatchesX.csv'), LidarPixelMatches(:,:,1));
+        csvwrite(strcat(itersavepath,'truth/truthLidarPixelMatchesY.csv'), LidarPixelMatches(:,:,2));
         
     end
     fprintf('Done! \n')
