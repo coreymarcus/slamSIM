@@ -2,7 +2,7 @@
 
 clear
 close all
-% clc
+clc
 
 
 %% Options
@@ -26,11 +26,15 @@ Noscil = 70; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
 %control if we used compiled code for image generation
-useMexForImgGen = true;
+useMexForImgGen = false;
+
+% Should we create lidar images?
+createlidar = false;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
-targIdx = [1:500]; %set of frames we'd like to run (1-idx, not 0-idx)
+savetruth = false;
+targIdx = [1:100]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
 runTargOnly = true;
 
@@ -43,13 +47,13 @@ saveAsCsv = true;
 
 % Noise
 addRBGNoise = false;
-addDepthNoise = true;
-addTrajNoise = true;
+addDepthNoise = false;
+addTrajNoise = false;
 MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
 MuRGB = 0; % average RGB noise
 PRGB = .01; % RGB noise covariance
-GaussBlurFactor = 3;
+GaussBlurFactor = 1;
 MuPos = zeros(3,1); % average position noise
 PPos = .001*eye(3); % position noise covariance
 MuEul = zeros(3,1); % Average euler angle noise
@@ -191,7 +195,7 @@ for ii = 1:LidarArrayWidth
         r13 = cos(LidarPitchAngles(jj));
         r(1) = -r13*sin(LidarYawAngles(ii));
         r(3) = r13*cos(LidarYawAngles(ii));
-                
+
         %map to pixels
         pbar = K*r;
         p = zeros(2,1);
@@ -199,9 +203,9 @@ for ii = 1:LidarArrayWidth
         p(2) = round(pbar(2)/pbar(3));
         %p(1) = pbar(1)/pbar(3);
         %p(2) = pbar(2)/pbar(3);
-        
+
         lidarPixelMatches(jj,ii,:) = p;
-        
+
     end
 end
 
@@ -228,24 +232,24 @@ aVec = [1; 1];
 
 %generate quaternions
 qArray = zeros(N,4);
-    
+
 for ii = 1:N
-    
+
     %create the quaternion for this location
     imFoc = [0 0 0]'; %point the image is centered on
     vz_I = imFoc - x(:,ii); %camera z-axis in the inertial frame
     vx_I = [vz_I(2); -vz_I(1); 0]; %camera x-axis in the inertial frame
-    
+
     %normalize vectors
     vx_I = vx_I/norm(vx_I);
     vz_I = vz_I/norm(vz_I);
-    
+
     %create matrix and solve wahbas problem
     vIMat = [vx_I'; vz_I'];
     RBI = wahbaSolver(aVec,vIMat,vBMat);
     q = dcm2quat(RBI);
     qArray(ii,:) = q;
-    
+
 end
 
 %generate attitude noise if needed
@@ -270,105 +274,109 @@ tic
 fprintf(1, 'Progress: %3d%%',0);
 
 parfor ii = idxs
-%     tic
     if(useMexForImgGen)
         imgRGBD = createImage_mex(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
     else
         imgRGBD = createImage(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
     end
-        
-%     toc
-    
+
     %extract RGB info
     img = imgRGBD(:,:,1:3);
     imgD = imgRGBD(:,:,4);
-    imgLidar = createLidarImage(imgD, lidarPixelMatches);
-    
 
-    
+    if(createlidar)
+        imgLidar = createLidarImage(imgD, lidarPixelMatches);
+    end
+
+
     %create some noise
     RGBnoise = mvnrnd(MuRGB*ones(sz(1)*sz(2),3), PRGB*eye(3));
     Dnoise = mvnrnd(MuLidar*ones(LidarArrayWidth*LidarArrayHeight,1), PLidar);
 
-    
+
     if(addRBGNoise)
         %add noise to img
         for jj = 1:sz(1)
             for kk = 1:sz(2)
-                
+
                 % linear index
                 idx = jj + (kk-1)*sz(1);
-                
+
                 %add RBG Noise
                 newPixel = squeeze(img(kk,jj,:)) + RGBnoise(idx,:)';
-                
+
                 %constrain RBG values
                 newPixel(newPixel > 1) = 1;
                 newPixel(newPixel < 0) = 0;
-                
+
                 %reassign
                 img(kk,jj,:) = newPixel;
-                
+
             end
         end
     end
 
-    if(addDepthNoise)
-        
+    if(addDepthNoise && createlidar)
+
         %add noise to imgLidar
         for jj = 1:LidarArrayWidth
             for kk = 1:LidarArrayHeight
-                
+
                 %linear index
                 idx = jj + (kk-1)*LidarArrayWidth;
-                
+
                 %depth noise
                 imgLidar(kk,jj) = imgLidar(kk,jj) + Dnoise(idx);
-                
+
             end
         end
-        
+
     end
 
     %apply gaussian blur to image
     imgFilt = imgaussfilt(img,GaussBlurFactor);
-    
-    %save Depth
-%     if(ii == targKF)
 
-%     imgDArray(:,:,ii) = imgD;
-%     end
-    
+    %save Depth
+    %     if(ii == targKF)
+
+    %     imgDArray(:,:,ii) = imgD;
+    %     end
+
     %display images
     % imgFilt = img;
     % imshow(img);
-    
+
     % figure(imgFig);
     % imshow(imgFilt);
-    
+
     % figure(imgDFig)
     % s = surf(imgD);
     % s.EdgeColor = 'interp';
     % view([0 0 -1])
-    
+
     % figure(lidarFig)
     % s = surf(imgLidar);
     % s.EdgeColor = 'interp';
     % view([0 0 -1])
-    
+
     %write images
     imwrite(imgFilt,strcat(savepath,'images/cubeCircling',num2str(ii-1,'%04i'),'.jpg'))
-    dlmwrite(strcat(savepath,'lidarImages/cubeCircling',num2str(ii-1,'%04i'),'.csv'),imgLidar,...
-        'precision','%.4f')
-    
+
+    if(createlidar)
+        writematrix(imgLidar,strcat(savepath,'lidarImages/cubeCircling',num2str(ii-1,'%04i'),'.csv'),...
+            'Delimiter',',');
+    end
+
     %write truth
-    fname = strcat(savepath,'truth/truthDepth',string(ii-1),'.csv');
-    csvwrite(fname, imgD);
-    
+    if(savetruth)
+        fname = strcat(savepath,'truth/truthDepth',string(ii-1),'.csv');
+        writematrix(imgD, fname, 'Delimiter',',');
+    end
+
     %display progress
     prog = ii/length(idxs)*100;
     fprintf(1,'\b\b\b\b%3.0f%%',prog);
-    
+
 end
 fprintf(1,'\n');
 toc
@@ -379,7 +387,7 @@ if(~saveAsCsv)
     truth.CArray = CArray;
     truth.traj = x;
     truth.quat = qArray;
-%     truth.depth = imgDArray;
+    %     truth.depth = imgDArray;
     truth.K = K;
     truth.lidarPixelMatches = lidarPixelMatches;
     save(strcat(savepath,'truth/slamSIM_truth.mat'),...
@@ -390,7 +398,7 @@ else
     csvwrite(strcat(savepath,'truth/truthK.csv'), K);
     csvwrite(strcat(savepath,'truth/truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,1));
     csvwrite(strcat(savepath,'truth/truthLidarPixelMatchesY.csv'), lidarPixelMatches(:,:,2));
-    
+
 end
 fprintf(1,'Done!\n Simulation Complete.\n');
-    
+
