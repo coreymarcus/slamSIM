@@ -34,7 +34,7 @@ createlidar = false;
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
 savetruth = false;
-targIdx = [1:100]; %set of frames we'd like to run (1-idx, not 0-idx)
+targIdx = [1:1000]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
 runTargOnly = true;
 
@@ -66,7 +66,11 @@ PEul = .0001*eye(3);
 %     addAttachedFiles(pool, 'createImage_mex.mexw64')
 % end
 
+% Scale for output translation
+scale_slam2truth = 2.5410;
 
+% Output file name for tracking truth
+outputfile = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\truth\TrackingTruth.csv';
 
 %% Main
 %path for wahba solver
@@ -84,6 +88,7 @@ for ii = 1:N
 end
 
 if(addTrajNoise)
+    disp('Adding attitude noise early!!!')
     posnoise = mvnrnd(MuPos',PPos,N);
     x = x + posnoise';
 end
@@ -251,6 +256,37 @@ for ii = 1:N
     qArray(ii,:) = q;
 
 end
+
+% Generate trajectory truth
+se3_tangent = zeros(N,6);
+for ii = 1:N
+    % Extract rotation matrix
+    R = quat2dcm(qArray(ii,:));
+    
+    % Extract translation
+    t = -R*x(:,ii)/scale_slam2truth;
+
+    % Construct 4x4 matrix
+    M = [R t;
+        0 0 0 1];
+    log_M = logm(M);
+
+    % Extract SE3 element
+    se3_tangent(ii,1:3) = log_M(1:3,4)';
+    se3_tangent(ii,4) = log_M(3,2);
+    se3_tangent(ii,5) = log_M(1,3);
+    se3_tangent(ii,6) = log_M(2,1);
+end
+
+% Get number of rows and columns and add to the file
+[r,c] = size(se3_tangent);
+toprow = zeros(1,c);
+toprow(1) = r;
+toprow(2) = c;
+se3_tangent = [toprow; se3_tangent];
+
+% Write the matrix
+writematrix(se3_tangent,outputfile,"Delimiter",',')
 
 %generate attitude noise if needed
 if(addTrajNoise)
