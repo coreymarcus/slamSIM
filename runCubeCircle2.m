@@ -18,7 +18,7 @@ LidarArrayHeight = 50;
 lidarImageRate = 1; %one to create lidar image for every camera image
 
 %circle parameters
-R = 6; %radius
+rad_circle = 6; %radius
 Nrev = 10000; %number of images per revolution
 inc = .5; %magnitude of oscilations
 Revs = .5; %number of revolutions around the cube
@@ -33,7 +33,8 @@ createlidar = false;
 
 %true depth data is massive, run this if you only want to create and save
 %it at the target index
-savetruth = false;
+savemaptruth = false;
+savetrackingtruth = true; % save truth tracking data in form of quat and position
 targIdx = [1:1000]; %set of frames we'd like to run (1-idx, not 0-idx)
 targKF = targIdx(1); %the frame where dense depth data for each image pixel will be saved
 runTargOnly = true;
@@ -67,10 +68,11 @@ PEul = .0001*eye(3);
 % end
 
 % Scale for output translation
-scale_slam2truth = 2.5410;
+scale_slam2truth = 5.4988;
 
 % Output file name for tracking truth
-outputfile = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\truth\TrackingTruth.csv';
+outputfile_posquat = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\truth\TrackingTruthPosQuat.csv';
+outputfile_se3 = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\truth\TrackingTruth.csv';
 
 %% Main
 %path for wahba solver
@@ -81,9 +83,9 @@ theta = linspace(0,2*pi*Revs,N);
 phi = inc*sin(Noscil*theta);
 x = zeros(3,N);
 for ii = 1:N
-    x(1,ii) = R*cos(theta(ii))*cos(phi(ii));
-    x(2,ii) = R*sin(theta(ii))*cos(phi(ii));
-    x(3,ii) = R*sin(phi(ii));
+    x(1,ii) = rad_circle*cos(theta(ii))*cos(phi(ii));
+    x(2,ii) = rad_circle*sin(theta(ii))*cos(phi(ii));
+    x(3,ii) = rad_circle*sin(phi(ii));
     %     x(3,ii) = inc;
 end
 
@@ -236,7 +238,7 @@ aVec = [1; 1];
 % lidarFig = figure;
 
 %generate quaternions
-qArray = zeros(N,4);
+qArray_inertial2cam = zeros(N,4);
 
 for ii = 1:N
 
@@ -253,21 +255,29 @@ for ii = 1:N
     vIMat = [vx_I'; vz_I'];
     RBI = wahbaSolver(aVec,vIMat,vBMat);
     q = dcm2quat(RBI);
-    qArray(ii,:) = q;
+    qArray_inertial2cam(ii,:) = q;
 
 end
 
-% Generate trajectory truth
+% save the trajectory truth in position, quaternion form
+truth_mat = [x' qArray_inertial2cam];
+
+% Write the matrix
+writematrix(truth_mat,outputfile_posquat,"Delimiter",',');
+
+% Generate trajectory truth in se3 tangent form
 se3_tangent = zeros(N,6);
+R_inertial2cam0 = quat2dcm(qArray_inertial2cam(1,:));
 for ii = 1:N
     % Extract rotation matrix
-    R = quat2dcm(qArray(ii,:));
+    R_inertial2cam = quat2dcm(qArray_inertial2cam(ii,:));
+    R_cam02cam = R_inertial2cam*R_inertial2cam0';
     
     % Extract translation
-    t = -R*x(:,ii)/scale_slam2truth;
+    t = -R_inertial2cam*(x(:,ii)-x(:,1))/scale_slam2truth;
 
     % Construct 4x4 matrix
-    M = [R t;
+    M = [R_cam02cam t;
         0 0 0 1];
     log_M = logm(M);
 
@@ -286,13 +296,13 @@ toprow(2) = c;
 se3_tangent = [toprow; se3_tangent];
 
 % Write the matrix
-writematrix(se3_tangent,outputfile,"Delimiter",',')
+writematrix(se3_tangent,outputfile_se3,"Delimiter",',')
 
 %generate attitude noise if needed
 if(addTrajNoise)
     anglenoise = mvnrnd(MuEul,PEul,N);
     quatnoise = angle2quat(anglenoise(:,1),anglenoise(:,2),anglenoise(:,3));
-    qArray = quatmultiply(qArray,quatnoise);
+    qArray_inertial2cam = quatmultiply(qArray_inertial2cam,quatnoise);
 end
 
 %control which images are created
@@ -311,9 +321,9 @@ fprintf(1, 'Progress: %3d%%',0);
 
 parfor ii = idxs
     if(useMexForImgGen)
-        imgRGBD = createImage_mex(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
+        imgRGBD = createImage_mex(CArray, x(:,ii), qArray_inertial2cam(ii,:)', V, sz, K);
     else
-        imgRGBD = createImage(CArray, x(:,ii), qArray(ii,:)', V, sz, K);
+        imgRGBD = createImage(CArray, x(:,ii), qArray_inertial2cam(ii,:)', V, sz, K);
     end
 
     %extract RGB info
@@ -404,7 +414,7 @@ parfor ii = idxs
     end
 
     %write truth
-    if(savetruth)
+    if(savemaptruth)
         fname = strcat(savepath,'truth/truthDepth',string(ii-1),'.csv');
         writematrix(imgD, fname, 'Delimiter',',');
     end
@@ -422,7 +432,7 @@ fprintf(1,'Writing out data... ');
 if(~saveAsCsv)
     truth.CArray = CArray;
     truth.traj = x;
-    truth.quat = qArray;
+    truth.quat = qArray_inertial2cam;
     %     truth.depth = imgDArray;
     truth.K = K;
     truth.lidarPixelMatches = lidarPixelMatches;
@@ -430,7 +440,7 @@ if(~saveAsCsv)
         'truth','-v7.3');
 else
     csvwrite(strcat(savepath,'truth/truthTraj.csv'), x');
-    csvwrite(strcat(savepath,'truth/truthQuat.csv'), qArray);
+    csvwrite(strcat(savepath,'truth/truthQuat.csv'), qArray_inertial2cam);
     csvwrite(strcat(savepath,'truth/truthK.csv'), K);
     csvwrite(strcat(savepath,'truth/truthLidarPixelMatchesX.csv'), lidarPixelMatches(:,:,1));
     csvwrite(strcat(savepath,'truth/truthLidarPixelMatchesY.csv'), lidarPixelMatches(:,:,2));
