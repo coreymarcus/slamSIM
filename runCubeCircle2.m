@@ -49,7 +49,7 @@ saveAsCsv = true;
 % Noise
 addRBGNoise = false;
 addDepthNoise = false;
-addTrajNoise = false;
+addTrajNoise = true;
 MuLidar = 0; %average lidar depth noise
 PLidar = .01^2; % lidar depth covariance, m^2
 MuRGB = 0; % average RGB noise
@@ -87,12 +87,6 @@ for ii = 1:N
     x(2,ii) = rad_circle*sin(theta(ii))*cos(phi(ii));
     x(3,ii) = rad_circle*sin(phi(ii));
     %     x(3,ii) = inc;
-end
-
-if(addTrajNoise)
-    disp('Adding attitude noise early!!!')
-    posnoise = mvnrnd(MuPos',PPos,N);
-    x = x + posnoise';
 end
 
 % figure
@@ -259,6 +253,16 @@ for ii = 1:N
 
 end
 
+%generate pose noise if needed
+if(addTrajNoise)
+    disp('Adding known peturbations to truth')
+    posnoise = mvnrnd(MuPos',PPos,N);
+    x = x + posnoise';
+    anglenoise = mvnrnd(MuEul,PEul,N);
+    quatnoise = angle2quat(anglenoise(:,1),anglenoise(:,2),anglenoise(:,3));
+    qArray_inertial2cam = quatmultiply(qArray_inertial2cam,quatnoise);
+end
+
 % save the trajectory truth in position, quaternion form
 truth_mat = [x' qArray_inertial2cam];
 
@@ -298,23 +302,12 @@ se3_tangent = [toprow; se3_tangent];
 % Write the matrix
 writematrix(se3_tangent,outputfile_se3,"Delimiter",',')
 
-%generate attitude noise if needed
-if(addTrajNoise)
-    anglenoise = mvnrnd(MuEul,PEul,N);
-    quatnoise = angle2quat(anglenoise(:,1),anglenoise(:,2),anglenoise(:,3));
-    qArray_inertial2cam = quatmultiply(qArray_inertial2cam,quatnoise);
-end
-
 %control which images are created
 if(runTargOnly)
     idxs = targIdx;
 else
     idxs = 1:N;
 end
-
-%create all the images
-% imgDArray = zeros(sz(2),sz(1),length(idxs));
-tic
 
 %display progress
 fprintf(1, 'Progress: %3d%%',0);
@@ -330,6 +323,8 @@ parfor ii = idxs
     img = imgRGBD(:,:,1:3);
     imgD = imgRGBD(:,:,4);
 
+    % Initialize array
+    imgLidar = [];
     if(createlidar)
         imgLidar = createLidarImage(imgD, lidarPixelMatches);
     end
@@ -425,7 +420,6 @@ parfor ii = idxs
 
 end
 fprintf(1,'\n');
-toc
 
 fprintf(1,'Writing out data... ');
 %write out truth data
