@@ -1,0 +1,3 @@
+[submodule "submodules/slamSIM"]
+	path = submodules/slamSIM
+	url = git@github.com:coreymarcus/matlabScripts.git
