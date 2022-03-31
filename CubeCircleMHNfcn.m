@@ -42,8 +42,8 @@ PEul = .0001*eye(3); % se3 tangent angle noise covariance
 scale_slam2truth = 1.0;
 
 %% Main
-%path for wahba solver
-addpath('../matlabScripts/')
+%path for some useful functions
+addpath('submodules/matlabScripts/')
 
 % Create the cube
 P = [1; 0; 0];
