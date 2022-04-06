@@ -1,6 +1,14 @@
 % Runs a circle around a cube
-function [] = CubeCircleMHNfcn(N_MC,targIdx)
+function [] = CubeCircleMHNfcn(varargin)
 
+%% Parse inputs
+if(isempty(varargin))
+    N_MC = 1;
+    targIdx = 1:2;
+else
+    N_MC = varargin{1};
+    targIdx = varargin{2};
+end
 
 %% Options
 
@@ -18,8 +26,12 @@ N = round(Revs*Nrev);
 %savepath for data
 savepath = 'data/MonteCarlo/';
 
-%save truth information as csv?
-saveAsCsv = true;
+%save truth trajectory information as csv?
+savetruthtrajascsv = true;
+
+% Save truth depth information as csv?
+savetruthdepth = true;
+truthdepthtargs = 1;
 
 % Noise
 addTrajNoise = true;
@@ -274,11 +286,8 @@ for MCidx = 1:N_MC
     toprow(2) = c;
     se3_tangent = [toprow; se3_tangent];
 
-    %display progress
-    fprintf(1, 'Progress: %3d%%',0);
-
     % for ii = targIdx
-    parfor ii = targIdx
+    for ii = targIdx
 
         %create image
         imgRGBD = createImage(CArray, x(:,ii), qArray_inertial2cam(ii,:)', V, sz, K);
@@ -292,16 +301,22 @@ for MCidx = 1:N_MC
         %write images
         imwrite(imgFilt,strcat(itersavepath,'images/cubeCircling',num2str(ii-1,'%04i'),'.jpg'))
 
+        % Consider saving the truth depth
+        if(savetruthdepth && ismember(ii,truthdepthtargs))
+            writematrix(imgRGBD(:,:,4),strcar(itersavepath,...
+                'truth/TruthDepth',num2str(ii-1,'%04i'),'.csv'),...
+                "Delimiter",",");
+        end
+
         %display progress
         prog = ii/N*100;
-        fprintf(1,'\b\b\b\b%3.0f%%',prog);
+        fprintf(1,'Progress: %3.0f \n',prog);
 
     end
-    fprintf(1,'\n');
 
     fprintf(1,'Writing out data... ');
     %write out truth data
-    if(~saveAsCsv)
+    if(~savetruthtrajascsv)
         truth.CArray = CArray;
         truth.traj = x;
         truth.quat = qArray_inertial2cam;
@@ -310,10 +325,18 @@ for MCidx = 1:N_MC
         save(strcat(itersavepath,'truth/slamSIM_truth.mat'),...
             'truth','-v7.3');
     else
-        csvwrite(strcat(itersavepath,'truth/truthTraj.csv'), x');
-        csvwrite(strcat(itersavepath,'truth/truthQuat.csv'), qArray_inertial2cam);
-        csvwrite(strcat(itersavepath,'truth/truthK.csv'), K);
-        writematrix(se3_tangent,strcat(itersavepath,'truth/TrackingTruth.csv'),"Delimiter",',')
+        writematrix(x',...
+            strcat(itersavepath,'truth/truthTraj.csv'),...
+            "Delimiter",",");
+        writematrix(qArray_inertial2cam,...
+            strcat(itersavepath,'truth/truthQuat.csv'),...
+            "Delimiter",",");
+        writematrix(K,...
+            strcat(itersavepath,'truth/truthK.csv'),...
+            "Delimiter",",");
+        writematrix(se3_tangent,...
+            strcat(itersavepath,'truth/TrackingTruth.csv'),...
+            "Delimiter",',')
     end
     fprintf('Done! \n')
 
