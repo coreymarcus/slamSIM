@@ -12,7 +12,7 @@ rad_circle = 6; %radius
 Nrev = 10000; %number of images per revolution
 inc = .5; %magnitude of oscilations
 Revs = .5; %number of revolutions around the cube
-Noscil = 70; %number of oscillations per revolution
+Noscil = pi; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
 %savepath for data
@@ -24,10 +24,11 @@ saveAsCsv = true;
 % Noise
 addTrajNoise = true;
 GaussBlurFactor = 1;
-P_R = .01; %variance in circle radius
+P_R = .1; %variance in circle radius
 P_inc = .01; %variance in circle height
 P_Noscil = .5; %variance in circle rate of oscilation
 P_revs = .001; %variance in total number of revolutions
+P_Rfinal = 1; % Covariance for final R
 % P_R = 0; %variance in circle radius
 % P_inc = 0; %variance in circle height
 % P_Noscil = 0; %variance in circle rate of oscilation
@@ -142,19 +143,13 @@ K = [f, 0, px;
 
 V = createPixelVectors(K,width,height);
 
-%run through and create an image at each point, always pointing towards the
-%center
-vz = [0; 0; 1];
-vx = [1; 0; 0];
-vBMat = [vx'; vz'];
-aVec = [1; 1];
-
 %loop through all MC
 for MCidx = 1:N_MC
 
     %create iteration specific variables for the trajectory parameters,
     %these may be corrupted by noise
     Riter = rad_circle;
+    Riter_final = rad_circle;
     inciter = inc;
     Nosciliter = Noscil;
     Revsiter = Revs;
@@ -162,26 +157,39 @@ for MCidx = 1:N_MC
     %generate attitude and position noise if needed
     if(addTrajNoise)
         Riter = Riter + mvnrnd(0,P_R);
+        Riter_final = Riter_final + mvnrnd(0,P_Rfinal);
         inciter = inciter + mvnrnd(0,P_inc);
         Nosciliter = Nosciliter + mvnrnd(0,P_Noscil);
         Revsiter = Revsiter + mvnrnd(0,P_revs);
     end
+
+    % Sample R
+    Rsample = linspace(Riter,Riter_final,N);
 
     %Create the positioning for this system
     theta = linspace(0,2*pi*Revsiter,N);
     phi = inciter*sin(Nosciliter*theta);
     x = zeros(3,N);
     for ii = 1:N
-        x(1,ii) = Riter*cos(theta(ii))*cos(phi(ii));
-        x(2,ii) = Riter*sin(theta(ii))*cos(phi(ii));
-        x(3,ii) = Riter*sin(phi(ii));
+        x(1,ii) = Rsample(ii)*cos(theta(ii))*cos(phi(ii));
+        x(2,ii) = Rsample(ii)*sin(theta(ii))*cos(phi(ii));
+        x(3,ii) = Rsample(ii)*sin(phi(ii));
     end
+
+%     figure, plot3(x(1,:),x(2,:),x(3,:))
+%     axis equal
 
     %generate quaternions
     qArray_inertial2cam = zeros(N,4);
 
     % Create the attitude for the system
     for ii = 1:N
+
+        % Initialize some vectors for whabaSolver
+        vz = [0; 0; 1];
+        vx = [1; 0; 0];
+        vBMat = [vx'; vz'];
+        aVec = [1; 1];
 
         %create the quaternion for this location
         imFoc = [0 0 0]'; %point the image is centered on
