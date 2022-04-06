@@ -76,7 +76,7 @@ for kk = 1:Ncubes
             vInert = quatrotateCoder(quatconj(q'),vCam')';
             
             % check intersect
-            [inter, D] = checkIntersect(C{kk}, P, vInert);
+            [inter, D] = checkIntersect(C{kk}, P, vInert, vCam);
             
             %intitialize pixel
             Pix = zeros(4,1);

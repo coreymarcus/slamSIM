@@ -4,7 +4,7 @@ function [] = CubeCircleMHNfcn(varargin)
 %% Parse inputs
 if(isempty(varargin))
     N_MC = 1;
-    targIdx = 1:2;
+    targIdx = 1;
 else
     N_MC = varargin{1};
     targIdx = varargin{2};
@@ -19,8 +19,10 @@ rng('shuffle');
 rad_circle = 6; %radius
 Nrev = 10000; %number of images per revolution
 inc = .5; %magnitude of oscilations
-Revs = 1.0; %number of revolutions around the cube
-Noscil = pi; %number of oscillations per revolution
+% Revs = 1.0; %number of revolutions around the cube
+Revs = 0.5;
+% Noscil = pi; %number of oscillations per revolution
+Noscil = 70;
 N = round(Revs*Nrev);
 
 %savepath for data
@@ -303,8 +305,8 @@ for MCidx = 1:N_MC
 
         % Consider saving the truth depth
         if(savetruthdepth && ismember(ii,truthdepthtargs))
-            writematrix(imgRGBD(:,:,4),strcar(itersavepath,...
-                'truth/TruthDepth',num2str(ii-1,'%04i'),'.csv'),...
+            writematrix(imgRGBD(:,:,4),...
+                strcat(itersavepath, 'truth/TruthDepth.csv'),...
                 "Delimiter",",");
         end
 

@@ -1,9 +1,10 @@
-function [I, D] = checkIntersect(C, P, v)
+function [I, D] = checkIntersect(C, P, v_inertial, v_cam)
 %checkIntersect detirmines if a vector will intersect the cube
 % Inputs
 % C - cube structure
 % P - 3x1 point of origin for the vector
-% v = 3x1 vector direction
+% v_intertial = 3x1 vector direction in inertial frame
+% v_cam = 3x1 vector direction in camera frame
 % 
 % Outputs
 % I = 0 if no intersect, i if hitting the ith face (1:6), 7 if hitting an
@@ -24,11 +25,11 @@ for ii = 1:6
     %our strategy is to solve for when the vector passes through the plane
     %of each face
     if(strcmp(F.plane,'x'))
-        t = (F.center(1) - P(1))/v(1);
+        t = (F.center(1) - P(1))/v_inertial(1);
     elseif(strcmp(F.plane,'y'))
-        t = (F.center(2) - P(2))/v(2);        
+        t = (F.center(2) - P(2))/v_inertial(2);        
     else %z plane
-        t = (F.center(3) - P(3))/v(3);
+        t = (F.center(3) - P(3))/v_inertial(3);
     end
     
     %throw out bad intersects
@@ -38,7 +39,7 @@ for ii = 1:6
     
     %check to see if the intersect is actually on the face or if is on an
     %edge
-    intPt = P + t*v;
+    intPt = P + t*v_inertial;
     
     if(strcmp(F.plane,'x'))
         if (intPt(2) > max(F.vertex(2,:)))
@@ -167,7 +168,7 @@ if(edgeHit(I) == 1)
 end
 
 %assign distance
-D = Y;
+D = Y*v_cam(3);
 
 %make sure I is one dimensional
 I = I(1);
