@@ -11,7 +11,7 @@ rng('shuffle');
 rad_circle = 6; %radius
 Nrev = 10000; %number of images per revolution
 inc = .5; %magnitude of oscilations
-Revs = .5; %number of revolutions around the cube
+Revs = 1.0; %number of revolutions around the cube
 Noscil = pi; %number of oscillations per revolution
 N = round(Revs*Nrev);
 
