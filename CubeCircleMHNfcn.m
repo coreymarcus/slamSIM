@@ -5,15 +5,17 @@ function [] = CubeCircleMHNfcn(varargin)
 if(isempty(varargin))
     N_MC = 1;
     targIdx = 1;
+    seed = 1;
 else
     N_MC = varargin{1};
     targIdx = varargin{2};
+    seed = varargin{3};
 end
 
 %% Options
 
-%make sure we get a different seed every time
-rng('shuffle');
+%set random number generator seed
+rng(seed);
 
 %circle parameters
 rad_circle = 6; %radius
@@ -53,8 +55,8 @@ MuEul = zeros(3,1); % average se3 tangent angle noise
 PEul = .0001*eye(3); % se3 tangent angle noise covariance
 
 % Scale for output translation
-% scale_slam2truth = 5.4988;
-scale_slam2truth = 1.0;
+scale_slam2truth = 6.4;
+% scale_slam2truth = 1.0;
 
 %% Main
 %path for some useful functions
@@ -289,7 +291,7 @@ for MCidx = 1:N_MC
     se3_tangent = [toprow; se3_tangent];
 
     % for ii = targIdx
-    for ii = targIdx
+    parfor ii = targIdx
 
         %create image
         imgRGBD = createImage(CArray, x(:,ii), qArray_inertial2cam(ii,:)', V, sz, K);
