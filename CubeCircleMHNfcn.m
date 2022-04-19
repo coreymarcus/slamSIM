@@ -37,6 +37,9 @@ savetruthtrajascsv = true;
 savetruthdepth = true;
 truthdepthtargs = 1;
 
+% Should we zero out rotation
+zerorotation = true;
+
 % Noise
 addTrajNoise = true;
 GaussBlurFactor = 1;
@@ -222,7 +225,12 @@ for MCidx = 1:N_MC
         q = dcm2quat(RBI);
         qArray_inertial2cam(ii,:) = q;
 
-    end
+        % Zero rotation
+        if(zerorotation)
+            qArray_inertial2cam(ii,:) = qArray_inertial2cam(1,:);
+        end
+
+    end 
 
     %generate pose noise if needed
     if(addTrajNoise)
