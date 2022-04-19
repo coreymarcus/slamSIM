@@ -50,9 +50,9 @@ P_Rfinal = 1; % Covariance for final R
 % P_Noscil = 0; %variance in circle rate of oscilation
 % P_revs = 0; %variance in total number of revolutions
 MuPos = zeros(3,1); % average se3 position position noise
-PPos = .001*eye(3); % se3 tangent position noise covariance
+PPos = 0*eye(3); % se3 tangent position noise covariance
 MuEul = zeros(3,1); % average se3 tangent angle noise
-PEul = .0001*eye(3); % se3 tangent angle noise covariance
+PEul = 0*eye(3); % se3 tangent angle noise covariance
 
 % Scale for output translation
 scale_slam2truth = 6.4;
