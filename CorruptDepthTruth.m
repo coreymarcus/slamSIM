@@ -6,7 +6,9 @@ clc
 %% Options
 
 % Data path which contains truth depth
-truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_LowAngleNoise\truth\';
+truthiscsv = false;
+% truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_LowAngleNoise\truth\';
+truthdatapath = 'C:\Users\corey\Documents\SharedFolder\EuRoC_data\V2_01_easy\mav0\cam0\truth\';
 
 % Distribution for initial corruption
 noisedist = 'Gaussian';
@@ -21,7 +23,13 @@ normalizedata = true;
 %% Main
 
 % load the truth data
-truthdepth = readmatrix(strcat(truthdatapath,"TruthDepth.csv"));
+if(truthiscsv)
+    truthdepth = readmatrix(strcat(truthdatapath,"TruthDepth.csv"));
+else
+    % This should be the EuRoC truth data
+    load(strcat(truthdatapath,'MapTruthData.mat'),'truthimages');
+    truthdepth = truthimages;
+end
 
 % Size
 [rows, cols] = size(truthdepth);
@@ -40,6 +48,9 @@ end
 noisydepth = truthdepth + reshape(noise,rows,cols);
 depthvar = sigma2*ones(rows,cols);
 
+% Force depth to be positive
+noisydepth = abs(noisydepth);
+
 % Normalize the output if needed
 if(normalizedata)
     scalefactor = mean(truthdepth,'all');
@@ -50,3 +61,13 @@ end
 % Save data
 writematrix(noisydepth,[truthdatapath 'DepthInit.csv'],'Delimiter',',');
 writematrix(depthvar,[truthdatapath 'DepthVarInit.csv'],'Delimiter',',');
+
+%% Plotting
+
+figure
+mesh(truthdepth,'FaceColor','interp')
+title('True Initial Map')
+
+figure
+mesh(noisydepth,'FaceColor','interp')
+title('Noisy Map Initialization')
