@@ -40,6 +40,9 @@ truthdepthtargs = 1;
 % Should we zero out rotation
 zerorotation = false;
 
+% Should the camera make some tilting motions?
+usetiltingmotion = false;
+
 % Noise
 addTrajNoise = true;
 GaussBlurFactor = 1;
@@ -211,7 +214,11 @@ for MCidx = 1:N_MC
         aVec = [1; 1];
 
         %create the quaternion for this location
-        imFoc = [0 0 0]'; %point the image is centered on
+        if(usetiltingmotion)
+            imFoc = [0 0 0]'; %point the image is centered on
+        else
+            imFoc = [0 0 x(3,ii)]'; %point the image is centered on
+        end
         vz_I = imFoc - x(:,ii); %camera z-axis in the inertial frame
         vx_I = [vz_I(2); -vz_I(1); 0]; %camera x-axis in the inertial frame
 
