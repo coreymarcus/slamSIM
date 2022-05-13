@@ -38,7 +38,7 @@ savetruthdepth = true;
 truthdepthtargs = 1;
 
 % Should we zero out rotation
-zerorotation = true;
+zerorotation = false;
 
 % Noise
 addTrajNoise = true;
