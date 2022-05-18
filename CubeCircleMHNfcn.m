@@ -119,25 +119,26 @@ P11 = [.2; -1; 2];
 C11 = createCube(P11, s, sw, fc, ec);
 
 %cube cell array rich environment
-CArray = cell(1);
-CArray{1,1} = C;
-CArray{2,1} = C2;
-CArray{3,1} = C3;
-CArray{4,1} = C4;
-CArray{5,1} = C5;
-CArray{6,1} = C6;
-CArray{7,1} = C7;
-CArray{8,1} = C8;
-CArray{9,1} = C9;
-CArray{10,1} = C10;
-CArray{11,1} = C11;
-
-%cube cell array sparse environment
 % CArray = cell(1);
 % CArray{1,1} = C;
 % CArray{2,1} = C2;
 % CArray{3,1} = C3;
 % CArray{4,1} = C4;
+% CArray{5,1} = C5;
+% CArray{6,1} = C6;
+% CArray{7,1} = C7;
+% CArray{8,1} = C8;
+% CArray{9,1} = C9;
+% CArray{10,1} = C10;
+% CArray{11,1} = C11;
+
+%cube cell array sparse environment
+CArray = cell(1);
+CArray{1,1} = C;
+CArray{2,1} = C2;
+CArray{3,1} = C3;
+CArray{4,1} = C4;
+CArray{5,1} = C7;
 
 %cube cell array without encompassing cube
 % CArray = cell(1);

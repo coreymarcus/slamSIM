@@ -6,9 +6,10 @@ clc
 %% Options
 
 % Data path which contains truth depth
-truthiscsv = false;
+truthiscsv = true;
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_LowAngleNoise\truth\';
-truthdatapath = 'C:\Users\corey\Documents\SharedFolder\EuRoC_data\V2_01_easy\mav0\cam0\truth\';
+truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_LowRot\truth\';
+% truthdatapath = 'C:\Users\corey\Documents\SharedFolder\EuRoC_data\V2_01_easy\mav0\cam0\truth\';
 
 % Distribution for initial corruption
 noisedist = 'Gaussian';
