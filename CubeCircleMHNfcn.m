@@ -45,7 +45,7 @@ usetiltingmotion = false;
 
 % Noise
 addTrajNoise = true;
-GaussBlurFactor = 1;
+GaussBlurFactor = 0.0;
 P_R = .1; %variance in circle radius
 P_inc = .01; %variance in circle height
 P_Noscil = .5; %variance in circle rate of oscilation
@@ -345,7 +345,11 @@ for MCidx = 1:N_MC
         img = imgRGBD(:,:,1:3);
 
         %apply gaussian blur to image
-        imgFilt = imgaussfilt(img,GaussBlurFactor);
+        if(GaussBlurFactor > 0)
+            imgFilt = imgaussfilt(img,GaussBlurFactor);
+        else
+            imgFilt = img;
+        end
 
         %write images
         imwrite(imgFilt,strcat(itersavepath,'images/cubeCircling',num2str(ii-1,'%04i'),'.jpg'))
