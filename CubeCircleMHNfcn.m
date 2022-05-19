@@ -19,7 +19,7 @@ rng(seed);
 
 %circle parameters
 rad_circle = 6; %radius
-Nrev = 10000; %number of images per revolution
+Nrev = 100000; %number of images per revolution
 inc = .5; %magnitude of oscilations
 % Revs = 1.0; %number of revolutions around the cube
 Revs = 0.5;
@@ -199,7 +199,7 @@ for MCidx = 1:N_MC
         x(3,ii) = Rsample(ii)*sin(phi(ii));
     end
 
-%     figure, plot3(x(1,:),x(2,:),x(3,:))
+%     figure, scatter3(x(1,targIdx),x(2,targIdx),x(3,targIdx))
 %     axis equal
 
     %generate quaternions
