@@ -80,7 +80,7 @@ fc = [1 0 0;
     0 1 1];
 
 ec = [.1 .1 .1];
-C = createCube(P, s, sw, fc, ec);
+C1 = createCube(P, s, sw, fc, ec);
 
 %create more cubes
 P2 = [0; 0; -2];
@@ -118,6 +118,28 @@ C10 = createCube(P10, s, sw, fc, ec);
 P11 = [.2; -1; 2];
 C11 = createCube(P11, s, sw, fc, ec);
 
+% MORE
+P12 = [0; 3; 1.5];
+C12 = createCube(P12, s, sw, fc, ec);
+
+P13 = [0; 0; 1.5];
+C13 = createCube(P13, s, sw, fc, ec);
+
+P14 = [1; -1; 2];
+C14 = createCube(P14, s, sw, fc, ec);
+
+P15 = [1; -2; -1];
+C15 = createCube(P15, s, sw, fc, ec);
+
+P16 = [0; 2; 2];
+C16 = createCube(P16, s, sw, fc, ec);
+
+P17 = [-5; 2; -2];
+C17 = createCube(P17, s, sw, fc, ec);
+
+P18 = [-5; -4; 1];
+C18 = createCube(P18, s, sw, fc, ec);
+
 %cube cell array rich environment
 % CArray = cell(1);
 % CArray{1,1} = C;
@@ -134,11 +156,18 @@ C11 = createCube(P11, s, sw, fc, ec);
 
 %cube cell array sparse environment
 CArray = cell(1);
-CArray{1,1} = C;
+CArray{1,1} = C1;
 CArray{2,1} = C2;
 CArray{3,1} = C3;
 CArray{4,1} = C4;
 CArray{5,1} = C7;
+CArray{6,1} = C12;
+CArray{7,1} = C13;
+CArray{8,1} = C14;
+CArray{9,1} = C15;
+CArray{10,1} = C16;
+CArray{11,1} = C17;
+CArray{12,1} = C18;
 
 %cube cell array without encompassing cube
 % CArray = cell(1);
