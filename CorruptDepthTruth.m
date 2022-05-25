@@ -8,7 +8,8 @@ clc
 % Data path which contains truth depth
 truthiscsv = true;
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_LowAngleNoise\truth\';
-truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_LowRot\truth\';
+% truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_LowRot\truth\';
+truthdatapath = 'C:\Users\cm58349\Documents\SharedFolder\SLAMsim_data\RunWithTruth_FewCubes\truth\';
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\EuRoC_data\V2_01_easy\mav0\cam0\truth\';
 
 % Distribution for initial corruption
@@ -25,7 +26,8 @@ normalizedata = true;
 
 % load the truth data
 if(truthiscsv)
-    truthdepth = readmatrix(strcat(truthdatapath,"TruthDepth.csv"));
+    truthdepth = csvread(strcat(truthdatapath,"TruthDepth.csv"));
+    %truthdepth = readmatrix(strcat(truthdatapath,"TruthDepth.csv"));
 else
     % This should be the EuRoC truth data
     load(strcat(truthdatapath,'MapTruthData.mat'),'truthimages');
@@ -54,14 +56,16 @@ noisydepth = abs(noisydepth);
 
 % Normalize the output if needed
 if(normalizedata)
-    scalefactor = mean(truthdepth,'all');
+    scalefactor = mean(reshape(truthdepth,[],1));
     noisydepth = noisydepth/scalefactor;
     depthvar = depthvar/scalefactor^2;
 end
 
 % Save data
-writematrix(noisydepth,[truthdatapath 'DepthInit.csv'],'Delimiter',',');
-writematrix(depthvar,[truthdatapath 'DepthVarInit.csv'],'Delimiter',',');
+% writematrix(noisydepth,[truthdatapath 'DepthInit.csv'],'Delimiter',',');
+% writematrix(depthvar,[truthdatapath 'DepthVarInit.csv'],'Delimiter',',');
+csvwrite([truthdatapath 'DepthInit.csv'],noisydepth);
+csvwrite([truthdatapath 'DepthVarInit.csv'],depthvar);
 
 %% Plotting
 
