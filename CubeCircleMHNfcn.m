@@ -196,7 +196,7 @@ K = [f, 0, px;
     0, 0, 1];
 
 if(useupscale)
-    K = upscale*K;
+    K(1:2,:) = upscale*K(1:2,:);
     sz = upscale*sz;
 end
 
