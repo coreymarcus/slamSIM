@@ -19,7 +19,7 @@ rng(seed);
 
 %circle parameters
 rad_circle = 6; %radius
-Nrev = 10000; %number of images per revolution
+Nrev = 100000; %number of images per revolution
 inc = .5; %magnitude of oscilations
 % Revs = 1.0; %number of revolutions around the cube
 Revs = 0.5;
@@ -45,7 +45,7 @@ usetiltingmotion = false;
 
 % Noise
 addTrajNoise = true;
-GaussBlurFactor = 1;
+GaussBlurFactor = 0.0;
 P_R = .1; %variance in circle radius
 P_inc = .01; %variance in circle height
 P_Noscil = .5; %variance in circle rate of oscilation
@@ -71,7 +71,7 @@ addpath('submodules/matlabScripts/')
 % Create the cube
 P = [1; 0; 0];
 s = 0.5;
-sw = 0.05;
+sw = 0.0;
 fc = [1 0 0;
     0 1 0;
     0 0 1;
@@ -80,7 +80,7 @@ fc = [1 0 0;
     0 1 1];
 
 ec = [.1 .1 .1];
-C = createCube(P, s, sw, fc, ec);
+C1 = createCube(P, s, sw, fc, ec);
 
 %create more cubes
 P2 = [0; 0; -2];
@@ -100,13 +100,13 @@ C6 = createCube(P6, s, sw, fc, ec);
 
 %create an all encompassing rectangular prism
 s = [14; 14; 12];
-sw = .1;
+sw = .0;
 C7 = createRectangularPrism([0, 0, 0]', s, sw, fc, ec, true);
 
 %more cubes
 P8 = [.4; 1; .4];
 s = 0.5;
-sw = .05;
+sw = .0;
 C8 = createCube(P8, s, sw, fc, ec);
 
 P9 = [-.4; 0; -.4];
@@ -117,6 +117,28 @@ C10 = createCube(P10, s, sw, fc, ec);
 
 P11 = [.2; -1; 2];
 C11 = createCube(P11, s, sw, fc, ec);
+
+% MORE
+P12 = [0; 3; 1.5];
+C12 = createCube(P12, s, sw, fc, ec);
+
+P13 = [0; 0; 1.5];
+C13 = createCube(P13, s, sw, fc, ec);
+
+P14 = [1; -1; 2];
+C14 = createCube(P14, s, sw, fc, ec);
+
+P15 = [1; -2; -1];
+C15 = createCube(P15, s, sw, fc, ec);
+
+P16 = [0; 2; 2];
+C16 = createCube(P16, s, sw, fc, ec);
+
+P17 = [-5; 2; -2];
+C17 = createCube(P17, s, sw, fc, ec);
+
+P18 = [-5; -4; 1];
+C18 = createCube(P18, s, sw, fc, ec);
 
 %cube cell array rich environment
 % CArray = cell(1);
@@ -134,11 +156,18 @@ C11 = createCube(P11, s, sw, fc, ec);
 
 %cube cell array sparse environment
 CArray = cell(1);
-CArray{1,1} = C;
+CArray{1,1} = C1;
 CArray{2,1} = C2;
 CArray{3,1} = C3;
 CArray{4,1} = C4;
 CArray{5,1} = C7;
+CArray{6,1} = C12;
+CArray{7,1} = C13;
+CArray{8,1} = C14;
+CArray{9,1} = C15;
+CArray{10,1} = C16;
+CArray{11,1} = C17;
+CArray{12,1} = C18;
 
 %cube cell array without encompassing cube
 % CArray = cell(1);
@@ -199,7 +228,7 @@ for MCidx = 1:N_MC
         x(3,ii) = Rsample(ii)*sin(phi(ii));
     end
 
-%     figure, plot3(x(1,:),x(2,:),x(3,:))
+%     figure, scatter3(x(1,targIdx),x(2,targIdx),x(3,targIdx))
 %     axis equal
 
     %generate quaternions
@@ -306,7 +335,7 @@ for MCidx = 1:N_MC
     toprow(2) = c;
     se3_tangent = [toprow; se3_tangent];
 
-    % for ii = targIdx
+    %for ii = targIdx
     parfor ii = targIdx
 
         %create image
@@ -316,7 +345,11 @@ for MCidx = 1:N_MC
         img = imgRGBD(:,:,1:3);
 
         %apply gaussian blur to image
-        imgFilt = imgaussfilt(img,GaussBlurFactor);
+        if(GaussBlurFactor > 0)
+            imgFilt = imgaussfilt(img,GaussBlurFactor);
+        else
+            imgFilt = img;
+        end
 
         %write images
         imwrite(imgFilt,strcat(itersavepath,'images/cubeCircling',num2str(ii-1,'%04i'),'.jpg'))
