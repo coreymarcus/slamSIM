@@ -335,7 +335,7 @@ for MCidx = 1:N_MC
         se3_tangent(ii,6) = log_M(2,1);
     end
 
-    % Get number of rows and columns and add to the file
+    % Add number of rows and columns to the file
     se3_tangent(1,1) = N;
     se3_tangent(1,2) = 6;
 
@@ -344,10 +344,16 @@ for MCidx = 1:N_MC
 
         %create image
         imgRGBD = createImage(CArray, x(:,ii), qArray_inertial2cam(ii,:)', V, sz, K);
+        
+        % Resize the RGB image
+        if(useupscale)
+            imgRGBD(:,:,1:3) = imresize(imgRGBD(:,:,1:3),[height width],'Method','bilinear');
+            imgRGBD(:,:,4) = imresize(imgRGBD(:,:,4),[height width],'Method','bilinear');
+        end
 
         %extract RGB info
         img = imgRGBD(:,:,1:3);
-
+        
         %apply gaussian blur to image
         if(GaussBlurFactor > 0)
             imgFilt = imgaussfilt(img,GaussBlurFactor);
