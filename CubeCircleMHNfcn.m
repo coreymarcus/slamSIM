@@ -43,6 +43,10 @@ zerorotation = false;
 % Should the camera make some tilting motions?
 usetiltingmotion = false;
 
+% Upscale the image?
+useupscale = true;
+upscale = 2; % [width, height] -> [upscale*width, upscale*height]
+
 % Noise
 addTrajNoise = true;
 GaussBlurFactor = 0.0;
@@ -191,7 +195,12 @@ K = [f, 0, px;
     0, f, py;
     0, 0, 1];
 
-V = createPixelVectors(K,width,height);
+if(useupscale)
+    K = upscale*K;
+    sz = upscale*sz;
+end
+
+V = createPixelVectors(K,sz(1),sz(2));
 
 %loop through all MC
 for MCidx = 1:N_MC
