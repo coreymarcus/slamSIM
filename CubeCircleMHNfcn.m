@@ -315,7 +315,7 @@ for MCidx = 1:N_MC
     % Generate trajectory truth in se3 tangent form
     se3_tangent = zeros(N+1,6);
     R_inertial2cam0 = quat2dcm(qArray_inertial2cam(1,:));
-    for ii = 2:N+1
+    for ii = 1:N
         % Extract rotation matrix
         R_inertial2cam = quat2dcm(qArray_inertial2cam(ii,:));
         R_cam02cam = R_inertial2cam*R_inertial2cam0';
@@ -329,10 +329,10 @@ for MCidx = 1:N_MC
         log_M = logm(M);
 
         % Extract SE3 element
-        se3_tangent(ii,1:3) = log_M(1:3,4)';
-        se3_tangent(ii,4) = log_M(3,2);
-        se3_tangent(ii,5) = log_M(1,3);
-        se3_tangent(ii,6) = log_M(2,1);
+        se3_tangent(ii+1,1:3) = log_M(1:3,4)';
+        se3_tangent(ii+1,4) = log_M(3,2);
+        se3_tangent(ii+1,5) = log_M(1,3);
+        se3_tangent(ii+1,6) = log_M(2,1);
     end
 
     % Add number of rows and columns to the file
