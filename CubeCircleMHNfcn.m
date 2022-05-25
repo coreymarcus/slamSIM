@@ -71,7 +71,7 @@ addpath('submodules/matlabScripts/')
 % Create the cube
 P = [1; 0; 0];
 s = 0.5;
-sw = 0.01;
+sw = 0.02;
 fc = [1 0 0;
     0 1 0;
     0 0 1;
@@ -100,13 +100,11 @@ C6 = createCube(P6, s, sw, fc, ec);
 
 %create an all encompassing rectangular prism
 s = [14; 14; 12];
-sw = .01;
 C7 = createRectangularPrism([0, 0, 0]', s, sw, fc, ec, true);
 
 %more cubes
 P8 = [.4; 1; .4];
 s = 0.5;
-sw = .01;
 C8 = createCube(P8, s, sw, fc, ec);
 
 P9 = [-.4; 0; -.4];
