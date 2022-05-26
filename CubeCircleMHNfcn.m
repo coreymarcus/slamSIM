@@ -344,13 +344,16 @@ for MCidx = 1:N_MC
     parfor ii = targIdx
 
         %create image
-        imgRGBD = createImage(CArray, x(:,ii), qArray_inertial2cam(ii,:)', V, sz, K);
+        imgRGBD_upscale = createImage(CArray, x(:,ii), qArray_inertial2cam(ii,:)', V, sz, K);
         
         % Resize the RGB image
         if(useupscale)
-            imgRGBD(:,:,1:3) = imresize(imgRGBD(:,:,1:3),[height width],'Method','bilinear');
-            imgRGBD(:,:,4) = imresize(imgRGBD(:,:,4),[height width],'Method','bilinear');
-        end
+            imgRGBD = zeros(height,width,4);
+            imgRGBD(:,:,1:3) = imresize(imgRGBD_upscale(:,:,1:3),[height width],'Method','bilinear');
+            imgRGBD(:,:,4) = imresize(imgRGBD_upscale(:,:,4),[height width],'Method','bilinear');
+        else
+	    imgRGBD = imgRGBD_upscale;
+	end
 
         %extract RGB info
         img = imgRGBD(:,:,1:3);
