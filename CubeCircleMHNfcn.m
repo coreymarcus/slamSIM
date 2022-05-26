@@ -194,6 +194,7 @@ py = height/2;
 K = [f, 0, px;
     0, f, py;
     0, 0, 1];
+Korig = K;
 
 if(useupscale)
     K(1:2,:) = upscale*K(1:2,:);
@@ -383,7 +384,7 @@ for MCidx = 1:N_MC
         truth.CArray = CArray;
         truth.traj = x;
         truth.quat = qArray_inertial2cam;
-        truth.K = K;
+        truth.K = Korig;
         truth.se3 = se3_tangent;
         save(strcat(itersavepath,'truth/slamSIM_truth.mat'),...
             'truth','-v7.3');
@@ -394,7 +395,7 @@ for MCidx = 1:N_MC
         writematrix(qArray_inertial2cam,...
             strcat(itersavepath,'truth/truthQuat.csv'),...
             "Delimiter",",");
-        writematrix(K,...
+        writematrix(Korig,...
             strcat(itersavepath,'truth/truthK.csv'),...
             "Delimiter",",");
         writematrix(se3_tangent,...
