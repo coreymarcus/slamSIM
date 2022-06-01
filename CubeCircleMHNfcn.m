@@ -75,7 +75,8 @@ addpath('submodules/matlabScripts/')
 % Create the cube
 P = [1; 0; 0];
 s = 0.5;
-sw = 0.02;
+% sw = 0.02;
+sw = 0.0;
 fc = [1 0 0;
     0 1 0;
     0 0 1;
