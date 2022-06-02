@@ -1,4 +1,4 @@
-function [I, D] = checkIntersect(C, P, v_inertial, v_cam)
+function [I, D, pt] = checkIntersect(C, P, v_inertial, v_cam)
 %checkIntersect detirmines if a vector will intersect the cube
 % Inputs
 % C - cube structure
@@ -10,14 +10,19 @@ function [I, D] = checkIntersect(C, P, v_inertial, v_cam)
 % I = 0 if no intersect, i if hitting the ith face (1:6), 7 if hitting an
 %   edge
 % D = depth to cube, 0 if no intersect
+% pt = [2x1] intersect point on the cube face where each element in [0, 1]
 
 
 %initialize depth
 D = 0;
 
+%initialize intersect point
+pt = [0 0]';
+
 %initialize detection logic
 ints = zeros(6,1);
 edgeHit = zeros(6,1);
+pts = zeros(2,6);
 for ii = 1:6
     %extract face information
     F = C.faces{ii};
@@ -42,6 +47,7 @@ for ii = 1:6
     intPt = P + t*v_inertial;
     
     if(strcmp(F.plane,'x'))
+
         if (intPt(2) > max(F.vertex(2,:)))
             continue;
         end
@@ -144,8 +150,28 @@ for ii = 1:6
         
     end
     
+    % If we're here, we have intersected this cube
     ints(ii) = t;
-    
+
+    % Find point wrt cube center
+    ptrelcube = intPt - C.P;
+
+    % Find the location on the cube face
+    switch F.plane
+        case 'x'
+            ptrelface = ptrelcube(2:3);
+        case 'y'
+            ptrelface = ptrelcube([1 3]);
+        case 'z'
+            ptrelface = ptrelcube(1:2);
+        otherwise
+            error('Invalid F.plane in checkIntersect()');
+    end
+
+    % Normalize and shift ptrelface to [0,1] domain
+    ptrelface_normalized = (ptrelface + [C.s(1)/2 C.s(1)/2]')./C.s(1);
+
+    pts(:,ii) = ptrelface_normalized;
 end
 
 %if theres no intersect, return 0
@@ -161,6 +187,9 @@ if(length(I) > 1)
     I = I(1);
     % disp('Exact Edge Intersect');
 end
+
+% Assign point
+pt = pts(:,I);
 
 %check for edge hit
 if(edgeHit(I) == 1)

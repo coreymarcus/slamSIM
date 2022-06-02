@@ -21,6 +21,7 @@ C.isAllEncomp = isAllEncomp;
 C.faces = cell(6,1);
 planes = ['x'; 'y'; 'z'];
 planes = [planes; planes];
+C.ombre = false;
 for ii = 1:6
     S.color = fc(ii,:);
     S.plane = planes(ii);

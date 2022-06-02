@@ -75,6 +75,9 @@ addpath('submodules/matlabScripts/')
 % Create the cube
 P = [1; 0; 0];
 s = 0.5;
+ombrecubes = true;
+varombre = 0.25;
+
 % sw = 0.02;
 sw = 0.0;
 fc = [1 0 0;
@@ -85,63 +88,65 @@ fc = [1 0 0;
     0 1 1];
 
 ec = [.1 .1 .1];
-C1 = createCube(P, s, sw, fc, ec);
+C1 = createCube(P, s, sw, fc, ec, ombrecubes, varombre);
 
 %create more cubes
 P2 = [0; 0; -2];
-C2 = createCube(P2, s, sw, fc, ec);
+C2 = createCube(P2, s, sw, fc, ec, ombrecubes, varombre);
 
 P3 = [1; -1; 0];
-C3 = createCube(P3, s, sw, fc, ec);
+C3 = createCube(P3, s, sw, fc, ec, ombrecubes, varombre);
 
 P4 = [0; 2; .5];
-C4 = createCube(P4, s, sw, fc, ec);
+C4 = createCube(P4, s, sw, fc, ec, ombrecubes, varombre);
 
 P5 = [-1; 0; 0];
-C5 = createCube(P5, s, sw, fc, ec);
+C5 = createCube(P5, s, sw, fc, ec, ombrecubes, varombre);
 
 P6 = [.4; -1; .4];
-C6 = createCube(P6, s, sw, fc, ec);
+C6 = createCube(P6, s, sw, fc, ec, ombrecubes, varombre);
 
 %create an all encompassing rectangular prism
 s = [14; 14; 12];
-C7 = createRectangularPrism([0, 0, 0]', s, sw, fc, ec, true);
+% C7 = createRectangularPrism([0, 0, 0]', s, sw, fc, ec, true);
+C7 = createCube([0, 0, 0]', 12, sw, fc, ec, ombrecubes, varombre);
+C7.isAllEncomp = true;
 
 %more cubes
 P8 = [.4; 1; .4];
 s = 0.5;
-C8 = createCube(P8, s, sw, fc, ec);
+C8 = createCube(P8, s, sw, fc, ec, ombrecubes, varombre);
 
 P9 = [-.4; 0; -.4];
-C9 = createCube(P9, s, sw, fc, ec);
+C9 = createCube(P9, s, sw, fc, ec, ombrecubes, varombre);
 
 P10 = [-.4; -1; -.4];
-C10 = createCube(P10, s, sw, fc, ec);
+C10 = createCube(P10, s, sw, fc, ec, ombrecubes, varombre);
 
 P11 = [.2; -1; 2];
-C11 = createCube(P11, s, sw, fc, ec);
+C11 = createCube(P11, s, sw, fc, ec, ombrecubes, varombre);
 
 % MORE
 P12 = [0; 3; 1.5];
-C12 = createCube(P12, s, sw, fc, ec);
+C12 = createCube(P12, s, sw, fc, ec, ombrecubes, varombre);
 
 P13 = [0; 0; 1.5];
-C13 = createCube(P13, s, sw, fc, ec);
+C13 = createCube(P13, s, sw, fc, ec, ombrecubes, varombre);
 
 P14 = [1; -1; 2];
-C14 = createCube(P14, s, sw, fc, ec);
+C14 = createCube(P14, s, sw, fc, ec, ombrecubes, varombre);
 
 P15 = [1; -2; -1];
-C15 = createCube(P15, s, sw, fc, ec);
+C15 = createCube(P15, s, sw, fc, ec, ombrecubes, varombre);
 
 P16 = [0; 2; 2];
-C16 = createCube(P16, s, sw, fc, ec);
+C16 = createCube(P16, s, sw, fc, ec, ombrecubes, varombre);
 
 P17 = [-5; 2; -2];
-C17 = createCube(P17, s, sw, fc, ec);
+C17 = createCube(P17, s, sw, fc, ec, ombrecubes, varombre);
 
 P18 = [-5; -4; 1];
-C18 = createCube(P18, s, sw, fc, ec);
+C18 = createCube(P18, s, sw, fc, ec, ombrecubes, varombre);
 
 %cube cell array rich environment
 % CArray = cell(1);

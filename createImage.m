@@ -76,7 +76,7 @@ for kk = 1:Ncubes
             vInert = quatrotateCoder(quatconj(q'),vCam')';
             
             % check intersect
-            [inter, D] = checkIntersect(C{kk}, P, vInert, vCam);
+            [inter, D, pt] = checkIntersect(C{kk}, P, vInert, vCam);
             
             %intitialize pixel
             Pix = zeros(4,1);
@@ -93,9 +93,16 @@ for kk = 1:Ncubes
                 Pix(1:3) = C{kk}.ec;
                 
             else
-                %else we hit an face and need to get that edges color
-                Pix(1:3) = C{kk}.faces{inter}.color;
-                
+
+                if(C{kk}.ombre)
+                    for idx = 1:3
+                        Pix(idx) = interp2([0 1],[0 1],C{kk}.faces{inter}.colormat(:,:,idx),pt(1),pt(2));
+                    end
+                else
+                    %else we hit an face and need to get that edges color
+                    Pix(1:3) = C{kk}.faces{inter}.color;
+                end
+
             end
             
             %build temporary row
