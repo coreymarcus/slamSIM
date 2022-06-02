@@ -242,8 +242,8 @@ for MCidx = 1:N_MC
         x(3,ii) = Rsample(ii)*sin(phi(ii));
     end
 
-%     figure, scatter3(x(1,targIdx),x(2,targIdx),x(3,targIdx))
-%     axis equal
+    %     figure, scatter3(x(1,targIdx),x(2,targIdx),x(3,targIdx))
+    %     axis equal
 
     %generate quaternions
     qArray_inertial2cam = zeros(N,4);
@@ -281,7 +281,7 @@ for MCidx = 1:N_MC
             qArray_inertial2cam(ii,:) = qArray_inertial2cam(1,:);
         end
 
-    end 
+    end
 
     %generate pose noise if needed
     if(addTrajNoise)
@@ -295,7 +295,7 @@ for MCidx = 1:N_MC
             log_M = zeros(4);
             log_M(1:3,4) = posnoise(ii,:)';
             log_M(1:3,1:3) = CrossProductMat(anglenoise(ii,:)');
-    
+
             M = expm(log_M);
 
             % Corrupt the position and velocity
@@ -351,19 +351,19 @@ for MCidx = 1:N_MC
 
         %create image
         imgRGBD_upscale = createImage(CArray, x(:,ii), qArray_inertial2cam(ii,:)', V, sz, K);
-        
+
         % Resize the RGB image
         if(useupscale)
             imgRGBD = zeros(height,width,4);
             imgRGBD(:,:,1:3) = imresize(imgRGBD_upscale(:,:,1:3),[height width],'Method','bilinear');
             imgRGBD(:,:,4) = imresize(imgRGBD_upscale(:,:,4),[height width],'Method','bilinear');
         else
-	    imgRGBD = imgRGBD_upscale;
-	end
+    	    imgRGBD = imgRGBD_upscale;
+    	end
 
         %extract RGB info
         img = imgRGBD(:,:,1:3);
-        
+
         %apply gaussian blur to image
         if(GaussBlurFactor > 0)
             imgFilt = imgaussfilt(img,GaussBlurFactor);
@@ -383,7 +383,7 @@ for MCidx = 1:N_MC
 
         %display progress
         prog = ii/N*100;
-        fprintf(1,'Progress: %3.0f \n',prog);
+        disp(prog)
 
     end
 
