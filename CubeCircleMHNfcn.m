@@ -194,6 +194,8 @@ CArray{12,1} = C18;
 f = 500;
 width = 640;
 height = 480;
+% width = 640/4;
+% height = 480/4;
 sz = [width, height];
 px = width/2;
 py = height/2;
@@ -346,7 +348,7 @@ for MCidx = 1:N_MC
     se3_tangent(1,1) = N;
     se3_tangent(1,2) = 6;
 
-    %for ii = targIdx
+%     for ii = targIdx
     parfor ii = targIdx
 
         %create image

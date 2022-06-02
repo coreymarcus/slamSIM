@@ -96,7 +96,17 @@ for kk = 1:Ncubes
 
                 if(C{kk}.ombre)
                     for idx = 1:3
-                        Pix(idx) = interp2([0 1],[0 1],C{kk}.faces{inter}.colormat(:,:,idx),pt(1),pt(2));
+%                         tic
+%                         Pix(idx) = interp2([0 1],[0 1],C{kk}.faces{inter}.colormat(:,:,idx),pt(1),pt(2));
+%                         toc
+
+%                         tic
+                        colormat = C{kk}.faces{inter}.colormat(:,:,idx);
+                        c1 = colormat(1,1) + pt(1)*(colormat(1,2) - colormat(1,1));
+                        c2 = colormat(1,1) + pt(2)*(colormat(2,1) - colormat(1,1));
+                        Pix(idx) = 0.5*(c1 + c2);
+%                         toc
+
                     end
                 else
                     %else we hit an face and need to get that edges color
