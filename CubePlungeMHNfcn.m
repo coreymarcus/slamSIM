@@ -20,7 +20,7 @@ rng(seed);
 %plunge parameters
 fcam = 20; % Camera frame rate
 x0 = [6 0 0]'; % Initial position [m]
-v0 = [-1 .1 .1]'; % Initial velocity [m/s]
+v0 = [-1 .1 1]'; % Initial velocity [m/s]
 dt = 1/fcam; % Time step
 N = length(targIdx); % Number of frames to create
 
