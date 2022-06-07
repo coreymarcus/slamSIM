@@ -76,7 +76,7 @@ addpath('submodules/matlabScripts/')
 P = [1; 0; 0];
 s = 0.5;
 ombrecubes = true;
-varombre = 0.25;
+varombre = 1.0;
 
 % sw = 0.02;
 sw = 0.0;
