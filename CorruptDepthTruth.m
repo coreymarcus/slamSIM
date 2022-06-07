@@ -12,7 +12,8 @@ truthiscsv = true;
 % truthdatapath = 'C:\Users\cm58349\Documents\SharedFolder\SLAMsim_data\RunWithTruth_FewCubes\truth\';
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_FewCubes\truth\';
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_ThinLines\truth\';
-truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\Ombre\truth\';
+% truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\Ombre\truth\';
+truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\Plunge\truth\';
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\EuRoC_data\V2_01_easy\mav0\cam0\truth\';
 
 % Distribution for initial corruption
@@ -20,7 +21,7 @@ noisedist = 'Gaussian';
 
 % Mean and variance for noise (pre-normalization)
 mu = 0;
-sigma2 = .1;
+sigma2 = .25;
 
 % Should we normalize the mean depth to 1?
 normalizedata = true;

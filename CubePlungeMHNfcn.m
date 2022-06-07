@@ -38,7 +38,7 @@ truthdepthtargs = 1;
 zerorotation = false;
 
 % Should the camera make some tilting motions?
-usetiltingmotion = false;
+usetiltingmotion = true;
 
 % Upscale the image?
 useupscale = false;
