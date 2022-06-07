@@ -21,7 +21,7 @@ noisedist = 'Gaussian';
 
 % Mean and variance for noise (pre-normalization)
 mu = 0;
-sigma2 = .25;
+sigma2 = 1.0;
 
 % Should we normalize the mean depth to 1?
 normalizedata = true;

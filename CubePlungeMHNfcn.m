@@ -20,7 +20,9 @@ rng(seed);
 %plunge parameters
 fcam = 20; % Camera frame rate
 x0 = [6 0 0]'; % Initial position [m]
-v0 = [-1 .1 1]'; % Initial velocity [m/s]
+varray = [-1 .1 1;
+    0 1 -.1]'; % Velocity after each time image idx [m/s]
+tarray = [50 Inf];
 dt = 1/fcam; % Time step
 N = length(targIdx); % Number of frames to create
 
@@ -209,12 +211,16 @@ for MCidx = 1:N_MC
     %Create the positioning for this system
     x = zeros(3,N);
     x(:,1) = x0;
+    vtarg = 1;
     for ii = 2:N
-        x(:,ii) = x(:,ii-1) + dt*v0;
+        x(:,ii) = x(:,ii-1) + dt*varray(:,vtarg);
+        if(ii == tarray(vtarg))
+            vtarg = vtarg + 1;
+        end
     end
 
-    figure, scatter3(x(1,targIdx),x(2,targIdx),x(3,targIdx))
-    axis equal
+%     figure, scatter3(x(1,targIdx),x(2,targIdx),x(3,targIdx))
+%     axis equal
 
     %generate quaternions
     qArray_inertial2cam = zeros(N,4);
@@ -317,7 +323,7 @@ for MCidx = 1:N_MC
     se3_tangent(1,1) = N;
     se3_tangent(1,2) = 6;
 
-%     for ii = targIdx
+    %     for ii = targIdx
     parfor ii = targIdx
 
         %create image
@@ -329,8 +335,8 @@ for MCidx = 1:N_MC
             imgRGBD(:,:,1:3) = imresize(imgRGBD_upscale(:,:,1:3),[height width],'Method','bilinear');
             imgRGBD(:,:,4) = imresize(imgRGBD_upscale(:,:,4),[height width],'Method','bilinear');
         else
-    	    imgRGBD = imgRGBD_upscale;
-    	end
+            imgRGBD = imgRGBD_upscale;
+        end
 
         %extract RGB info
         img = imgRGBD(:,:,1:3);
