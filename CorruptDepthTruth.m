@@ -13,7 +13,9 @@ truthiscsv = true;
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_FewCubes\truth\';
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\RunWithTruth_ThinLines\truth\';
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\Ombre\truth\';
-truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\Plunge\truth\';
+% truthdatapath = 'C:\Users\corey\Documents\SharedFolder\SLAMsim_data\Plunge\truth\';
+truthdatapath = ['C:\Users\corey\Documents\SharedFolder\SLAMsim_data\Plunge_Lines' ...
+    '\truth\'];
 % truthdatapath = 'C:\Users\corey\Documents\SharedFolder\EuRoC_data\V2_01_easy\mav0\cam0\truth\';
 
 % Add path for gammaSLAM
