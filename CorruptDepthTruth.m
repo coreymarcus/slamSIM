@@ -25,10 +25,15 @@ noisedist = 'MHN';
 
 % Mean and variance for noise (pre-normalization)
 mu = 0;
-sigma2 = 3;
+sigma2 = .1;
 
 % Should we normalize the mean depth to 1?
 normalizedata = true;
+
+% Should we eliminate knowledge of some segment?
+eliminatesegment = false;
+eliminatetarget = [247 394 168 318];
+newdepth = 12;
 
 %% Main
 
@@ -48,6 +53,13 @@ end
 % Create noise
 N = rows*cols;
 
+% Eliminate some portion of the depthmap if needed
+truthdeptheliminate = truthdepth;
+if(eliminatesegment)
+    truthdeptheliminate(eliminatetarget(3):eliminatetarget(4),...
+        eliminatetarget(1):eliminatetarget(2)) = newdepth;
+end
+
 switch noisedist
     case 'Gaussian'
 
@@ -55,7 +67,7 @@ switch noisedist
         noise = mvnrnd(mu, sigma2, N);
 
         % Create output depth and variance
-        noisydepth = truthdepth + reshape(noise,rows,cols);
+        noisydepth = truthdeptheliminate + reshape(noise,rows,cols);
         depthvar = sigma2*ones(rows,cols);
 
         % Force depth to be positive
@@ -63,7 +75,7 @@ switch noisedist
 
         % Normalize the output if needed
         if(normalizedata)
-            scalefactor = mean(reshape(truthdepth,[],1));
+            scalefactor = mean(reshape(truthdeptheliminate,[],1));
             noisydepth = noisydepth/scalefactor;
             depthvar = depthvar/scalefactor^2;
         end
@@ -71,7 +83,7 @@ switch noisedist
     case 'MHN'
 
         % Reshape truth depth to vector
-        truthdepthvec = reshape(truthdepth,N,1);
+        truthdepthvec = reshape(truthdeptheliminate,N,1);
         noisydepthvec = zeros(N,1);
 
         % Output depth variance
@@ -88,7 +100,7 @@ switch noisedist
 
         % Normalize output if needed
         if(normalizedata)
-            scalefactor = mean(reshape(truthdepth,[],1));
+            scalefactor = mean(reshape(truthdeptheliminate,[],1));
             noisydepthvec = noisydepthvec/scalefactor;
             depthvar = depthvar/scalefactor^2;
         end
@@ -113,6 +125,12 @@ csvwrite([truthdatapath 'DepthVarInit.csv'],depthvar);
 figure
 mesh(truthdepth,'FaceColor','interp')
 title('True Initial Map')
+
+if(eliminatesegment)
+    figure
+    mesh(truthdeptheliminate,'FaceColor','interp')
+    title('True Initial Map With Eliminated Area')
+end
 
 figure
 mesh(noisydepth,'FaceColor','interp')

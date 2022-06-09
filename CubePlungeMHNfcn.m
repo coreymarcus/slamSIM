@@ -68,8 +68,8 @@ s = 0.5;
 ombrecubes = false;
 varombre = 0.25;
 
-% sw = 0.02;
-sw = 0.0;
+sw = 0.02;
+% sw = 0.0;
 fc = [1 0 0;
     0 1 0;
     0 0 1;
