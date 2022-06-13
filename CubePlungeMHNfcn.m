@@ -20,7 +20,7 @@ rng(seed);
 %plunge parameters
 fcam = 20; % Camera frame rate
 x0 = [6 0 0]'; % Initial position [m]
-varray = [-1.5 .5 .5;
+varray = [-1 .5 .5;
     -.5 1 -.1]'; % Velocity after each time image idx [m/s]
 tarray = [50 Inf];
 dt = 1/fcam; % Time step
